@@ -9,6 +9,9 @@
                 <a href="{{ path('index') }}" class="nav-link">Inicio <i class="fas fa-home"></i></a>
             </li>
             {% if is_granted("ROLE_ADMIN") %}
+                <li class="nav-item {% if app.request.attributes.get('_route') == "crear_usuario" %}active{% endif %}">
+                    <a href="{{ path("crear_usuario") }}" class="nav-link">Crear usuario <i class="fas fa-user-plus"></i></a>
+                </li>
                 <li class="nav-item {% if app.request.attributes.get('_route') == "listar_usuarios" %}active{% endif %}">
                     <a href="{{ path("listar_usuarios") }}" class="nav-link">Listar usuarios <i class="fas fa-users"></i></a>
                 </li>

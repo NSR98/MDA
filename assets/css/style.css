@@ -15,6 +15,15 @@ body{
     width: 60% !important;
 }
 
+.formNewUser{
+    width: 70vw;
+    margin: auto;
+    margin-top: 7vh;
+    font-weight: 700;
+    color: #573b7a;
+
+}
+
 .table-striped tr{
     background-color: #c3b1cc;
 }

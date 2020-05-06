@@ -18,7 +18,10 @@
                 <td>{{ usuario.name }}</td>
                 <td>{{ usuario.email }}</td>
                 <td>{{ usuario.dni }}</td>
-                <td></td>
+                <td>
+                   {# NO BORRAR ES CODIGFO QUE KEVIN METERA EN EL PROX COMMIT,#}
+                    <a {#href="{{ path('editar_usuario', {'id': usuario.id }) }}"#} class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
+                </td>
             </tr>
         {% endfor %}
     </table>
