@@ -10,6 +10,26 @@ body{
     background: #f8f9fa;
 }
 
+.listado_usuarios{
+    margin: auto !important;
+    width: 60% !important;
+}
+
+.table-striped tr{
+    background-color: #c3b1cc;
+}
+
+.table-striped td{
+    padding: 1.5vh 1.5vh;
+    font-weight: 600;
+}
+.table-striped th{
+    background-color: #573b7a;
+    padding: 2vh 2vh;
+    color: white;
+    font-weight: 600;
+}
+
 .card-signin {
     border: 0;
     border-radius: 1rem;

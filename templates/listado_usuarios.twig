@@ -1,0 +1,33 @@
+{% extends 'base/base.html.twig' %}
+
+{% block body %}
+    <div class="h3 text-center p-3">Listado de usuarios</div>
+    <table class="table-striped listado_usuarios" >
+        <tr>
+            <th>Nombre de usuario</th>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Email</th>
+            <th>DNI</th>
+            <th>Acciones</th>
+        </tr>
+        {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.user }}</td>
+                <td>{{ usuario.surname }}</td>
+                <td>{{ usuario.name }}</td>
+                <td>{{ usuario.email }}</td>
+                <td>{{ usuario.dni }}</td>
+                <td></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
+
+{% block title %}
+    Listado usuarios
+{% endblock %}
+
+{% block js %}
+{% endblock %}
