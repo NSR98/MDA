@@ -1,0 +1,22 @@
+{% extends "base/base.html.twig" %}
+
+{% block body %}
+    <div class="jumbotron">
+        <h1>METODOLOGÍAS DEL DESARROLLO ÁGIL</h1>
+        <h3>Proyecto desarrollado por:</h3>
+        <ul>
+            <li>Kevin Naranjo Ruano</li>
+            <li>Airam Ortega Suárez</li>
+            <li>Álvaro Saúl Rodríguez Alemán</li>
+            <li>Nahuel Sánchez Rodríguez</li>
+        </ul>
+        {% if not app.user %}
+            <a href="{{ path('app_login') }}"><h6>Iniciar sesión</h6></a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block title %}
+Índice
+{% endblock %}
+
