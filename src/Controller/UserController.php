@@ -8,10 +8,12 @@ use App\Form\Type\UserType;
 use App\Service\PoliticumDataAccess;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class UserController extends AbstractController
 {
@@ -59,5 +61,28 @@ class UserController extends AbstractController
             'form' => $form->createView(),
             'crear' => true
         ]);
+    }
+
+    /**
+     * @Route("/borrar_usuario", name="borrar_usuario")
+     * @param PoliticumDataAccess $dataAccess
+     * @return JsonResponse
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function borrar_usuario(Request $request, PoliticumDataAccess $dataAccess): JsonResponse
+    {
+        if (!$request->request->has("id")) {
+            throw new AccessDeniedException();
+        }
+
+        if ($dataAccess->deleteUser($request->request->get("id"))) {
+            return new JsonResponse([
+                'content' => $this->renderView('listado_usuarios_table.twig', [
+                    "usuarios" => $dataAccess->getUsers(),
+                ]),
+            ]);
+        } else {
+            return new JsonResponse(['content' => null]);
+        }
     }
 }
