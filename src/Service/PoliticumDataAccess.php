@@ -33,6 +33,11 @@ class PoliticumDataAccess extends DataAccess {
         return parent::executeSQL("DELETE FROM usuarios WHERE id = :id", array('id' => $id));
     }
 
+    public function getPublicaciones()
+    {
+        return parent::executeSQL("SELECT * FROM publicaciones ORDER BY fecha DESC;")->fetchAll();
+    }
+
     public function getPublicacion(int $id)
     {
         return parent::executeSQL("SELECT * FROM publicaciones WHERE id = :id", [

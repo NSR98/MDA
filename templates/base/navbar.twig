@@ -16,6 +16,9 @@
                     <a href="{{ path("listar_usuarios") }}" class="nav-link">Listar usuarios <i class="fas fa-users"></i></a>
                 </li>
             {% endif %}
+            <li class="nav-item {% if app.request.attributes.get('_route') == "foro" %}active{% endif %}">
+                <a href="{{ path("foro") }}" class="nav-link">Foro <i class="fas fa-comment-alt"></i></a>
+            </li>
         </ul>
     </div>
     <div class="collapse navbar-collapse order-9">

@@ -13,6 +13,18 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ForumController extends AbstractController {
     /**
+     * @Route("/foro", name="foro")
+     * @param PoliticumDataAccess $dataAccess
+     * @return Response
+     */
+    public function foro(PoliticumDataAccess $dataAccess){
+        return $this->render("foro.twig",  [
+            "publicaciones" => $dataAccess->getPublicaciones(),
+            "usuarios" => $dataAccess->getUsers()
+        ]);
+    }
+
+    /**
      * @Route("/foro/publicacion/{id}", name="ver_publicacion")
      * @param PoliticumDataAccess $dataAccess
      * @param int $id
