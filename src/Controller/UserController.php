@@ -116,6 +116,7 @@ class UserController extends AbstractController
                 return $this->redirectToRoute("listar_usuarios");
             } else {
                 $this->addFlash("danger", "Hubo un error con la conexión a internet. Por favor, inténtalo de nuevo más tarde.");
+
             }
         }
 

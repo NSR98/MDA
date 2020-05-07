@@ -18,7 +18,7 @@ class RespuestaType extends AbstractType
                 "label" => "Respuesta"
             ])
             ->add("submit", SubmitType::class, [
-                "label" => "Añadir"
+                "label" => "Responder"
             ]);
     }
 }

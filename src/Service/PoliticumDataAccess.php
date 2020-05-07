@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Respuesta;
 use App\Entity\User;
 
 class PoliticumDataAccess extends DataAccess {
@@ -75,5 +76,15 @@ class PoliticumDataAccess extends DataAccess {
         return parent::executeSQL("SELECT * FROM respuestas WHERE id_publicacion = :id ORDER BY fecha DESC", [
             "id" => $id
         ])->fetchAll();
+    }
+
+    public function createRespuesta(Respuesta $respuesta, int $id_usuario, int $id_publicacion)
+    {
+        parent::executeSQL("INSERT INTO respuestas(id_usuario, id_publicacion, respuesta, fecha) VALUES (:id_usuario, :id_publicacion, :respuesta, :fecha);", [
+            "id_usuario" => $id_usuario,
+            "id_publicacion" => $id_publicacion,
+            "respuesta" => $respuesta->getRespuesta(),
+            "fecha" => date("Y-m-d H:i:s")
+        ]);
     }
 }
