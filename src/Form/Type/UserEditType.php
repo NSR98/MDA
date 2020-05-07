@@ -31,10 +31,6 @@ class UserEditType extends AbstractType
             ->add("name", TextType::class, [
                 "label" => "Nombre"
             ])
-            ->add("photo", FileType::class, [
-                "required" => false,
-                "label" => "Foto"
-            ])
             ->add("dni", TextType::class, [
                 "label" => "DNI"
             ])

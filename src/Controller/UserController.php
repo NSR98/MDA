@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\Type\UserEditType;
 use App\Form\Type\UserType;
 use App\Service\PoliticumDataAccess;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -84,5 +85,43 @@ class UserController extends AbstractController
         } else {
             return new JsonResponse(['content' => null]);
         }
+    }
+
+
+    /**
+     * @Route("/editar_usuario/{id}", name="editar_usuario")
+     * @param int $id
+     * @param Request $request
+     * @param PoliticumDataAccess $dataAccess
+     * @param UserPasswordEncoderInterface $encoder
+     * @return Response
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function editar_usuario(int $id, Request $request, PoliticumDataAccess $dataAccess, UserPasswordEncoderInterface $encoder): Response
+    {
+        $form = $this->createForm(UserEditType::class, new User($dataAccess->getUser($id)));
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
+            $aux = $user->getPassword();
+            if (isset($aux)){
+                $encodedPassword = $encoder->encodePassword(new User(), $user->getPassword());
+                $user->setPassword($encodedPassword);
+            }
+
+
+            if ($dataAccess->updateUser($user, $id)) {
+                $this->addFlash("success", "El usuario ha sido actualizado correctamente");
+                return $this->redirectToRoute("listar_usuarios");
+            } else {
+                $this->addFlash("danger", "Hubo un error con la conexión a internet. Por favor, inténtalo de nuevo más tarde.");
+            }
+        }
+
+        return $this->render('gestionar_usuario.twig', [
+            'form' => $form->createView(),
+            'crear' => false
+        ]);
     }
 }
