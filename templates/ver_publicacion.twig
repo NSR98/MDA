@@ -1,6 +1,27 @@
 {% extends 'base/base.html.twig' %}
 
 {% block body %}
+    <div class="container">
+        <a href="{{ path('foro') }}" class="btn btn-sm btn-secondary mt-5">Volver al foro</a>
+        <h2 class="mt-3">{{ publicacion.titulo }}</h2>
+        <div class="card mt-3 mb-3" style="background-color: #e2daff;">
+            <div class="card-header">{{ usuarios[publicacion.id_usuario].name }}</div>
+            <div class="card-body">{{ publicacion.descripcion }}</div>
+            <div class="card-footer">{{ publicacion.fecha }}</div>
+        </div>
+
+        {% for respuesta in respuestas %}
+            <div class="card ml-5 mb-3">
+                <div class="card-header">{{ usuarios[respuesta.id_usuario].name }}</div>
+                <div class="card-body">{{ respuesta.respuesta }}</div>
+                <div class="card-footer">{{ respuesta.fecha }}</div>
+            </div>
+        {% else %}
+            <h4 class="text-danger my-3">Aún no hay respuestas para este hilo, ¡Sé el primero!</h4>
+        {% endfor %}
+
+        <a href="" class="btn btn-primary mt-3">Añadir respuesta</a>
+    </div>
 {% endblock %}
 
 {% block title %}

@@ -39,6 +39,7 @@ class ForumController extends AbstractController {
         return $this->render("ver_publicacion.twig",  [
             "publicacion" => $dataAccess->getPublicacion($id),
             "respuestas" => $dataAccess->getRespuestas($id),
+            "usuarios" => $dataAccess->getUsers()
         ]);
     }
 }
