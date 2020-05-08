@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Publicacion;
 use App\Entity\Respuesta;
 use App\Entity\User;
 
@@ -85,6 +86,16 @@ class PoliticumDataAccess extends DataAccess {
             "id_publicacion" => $id_publicacion,
             "respuesta" => $respuesta->getRespuesta(),
             "fecha" => date("Y-m-d H:i:s")
+        ]);
+    }
+
+    public function createPublicacion(Publicacion $publicacion, int $id_usuario)
+    {
+        parent::executeSQL("INSERT INTO publicaciones(titulo, descripcion, fecha, id_usuario) VALUES (:titulo, :descripcion, :fecha, :id_usuario);", [
+            "titulo" => $publicacion->getTitulo(),
+            "descripcion" => $publicacion->getDescripcion(),
+            "fecha" => date("Y-m-d H:i:s"),
+            "id_usuario" => $id_usuario
         ]);
     }
 
