@@ -13,7 +13,7 @@
             <td>
                 <a href="{{ path('ver_publicacion', {"id" : publicacion.id}) }}" class="btn btn-sm btn-primary"><i class="fa fas fa-eye"></i></a>
                 {% if is_granted("ROLE_ADMIN") %}
-                    <a href="" class="btn btn-sm btn-primary"><i class="fa fas fa-edit"></i></a>
+                    <a href="{{ path('modificar_publicacion', {"id" : publicacion.id}) }}" class="btn btn-sm btn-primary"><i class="fa fas fa-edit"></i></a>
                 {% endif %}
                 {% if is_granted("ROLE_ADMIN") or app.user.id == publicacion.id_usuario %}
                     <button class="btn btn-sm btn-danger" onclick="deletePublicacion({{ publicacion.id }})"><i class="fa fas fa-trash-alt"></i></button>

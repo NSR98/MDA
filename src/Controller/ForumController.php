@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Publicacion;
+use App\Form\Type\PublicacionType;
 use App\Service\PoliticumDataAccess;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -55,5 +57,18 @@ class ForumController extends AbstractController {
     {
         $dataAccess->deletePublicacion($request->request->get("id"));
         return new JsonResponse();
+    }
+
+
+    /**
+     * @Route("/foro/modificar_publicacion/{id}", name="modificar_publicacion")
+     * @IsGranted("ROLE_ADMIN")
+     * @param PoliticumDataAccess $dataAccess
+     * @param Request $request
+     * @param int $id
+     * @return Response
+     */
+    public function modificar_publicacion(PoliticumDataAccess $dataAccess, Request $request, int $id){
+        //A implementar en la proxima sesion de trabajo
     }
 }
