@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Publicacion;
+use App\Entity\Respuesta;
 use App\Form\Type\PublicacionType;
+use App\Form\Type\RespuestaType;
 use App\Service\PoliticumDataAccess;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -70,5 +72,29 @@ class ForumController extends AbstractController {
      */
     public function modificar_publicacion(PoliticumDataAccess $dataAccess, Request $request, int $id){
         //A implementar en la proxima sesion de trabajo
+    }
+
+    /**
+     * @Route("/foro/publicacion/{id}/crear_respuesta", name="crear_respuesta")
+     * @param PoliticumDataAccess $dataAccess
+     * @param Request $request
+     * @param int $id
+     * @return Response
+     */
+    public function crear_respuesta(PoliticumDataAccess $dataAccess, Request $request, int $id){
+        $form = $this->createForm(RespuestaType::class, new Respuesta());
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (!$dataAccess->createRespuesta($form->getData(), $this->getUser()->getId(), $id)) {
+                $this->addFlash("success", "La respuesta se ha creado correctamete");
+                return $this->redirectToRoute("ver_publicacion", array('id' => $id));
+            } else {
+                $this->addFlash("danger", "Hubo un error con la conexión a internet. Por favor, inténtalo de nuevo más tarde.");
+            }
+        }
+
+        return $this->render('gestionar_respuesta.twig', [
+            'form' => $form->createView()
+        ]);
     }
 }

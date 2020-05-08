@@ -10,8 +10,10 @@
             <div class="card-footer">{{ publicacion.fecha }}</div>
         </div>
 
+        <a href="{{ path('crear_respuesta', {"id" : publicacion.id}) }}" class="btn btn-primary mt-3">Añadir respuesta</a>
+
         {% for respuesta in respuestas %}
-            <div class="card ml-5 mb-3">
+            <div class="card ml-5 mb-3 mt-3">
                 <div class="card-header">{{ usuarios[respuesta.id_usuario].name }}</div>
                 <div class="card-body">{{ respuesta.respuesta }}</div>
                 <div class="card-footer">{{ respuesta.fecha }}</div>
@@ -20,7 +22,7 @@
             <h4 class="text-danger my-3">Aún no hay respuestas para este hilo, ¡Sé el primero!</h4>
         {% endfor %}
 
-        <a href="" class="btn btn-primary mt-3">Añadir respuesta</a>
+
     </div>
 {% endblock %}
 
