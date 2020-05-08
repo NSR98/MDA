@@ -11,3 +11,22 @@
 {% block title %}
     Foro - Politicum
 {% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        function deletePublicacion(id) {
+            $.ajax({
+                method: 'POST',
+                url: '{{ path('borrar_publicacion') }}',
+                data: {
+                    "id" : id,
+                },
+                success: function(data) {
+                    console.log(data)
+                },
+                error: function() {
+                }
+            });
+        }
+    </script>
+{% endblock %}

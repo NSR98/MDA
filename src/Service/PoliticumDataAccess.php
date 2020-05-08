@@ -87,4 +87,8 @@ class PoliticumDataAccess extends DataAccess {
             "fecha" => date("Y-m-d H:i:s")
         ]);
     }
+
+    public function deletePublicacion(int $id)
+    {
+    }
 }

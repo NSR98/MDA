@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Service\PoliticumDataAccess;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -41,5 +43,17 @@ class ForumController extends AbstractController {
             "respuestas" => $dataAccess->getRespuestas($id),
             "usuarios" => $dataAccess->getUsers()
         ]);
+    }
+
+    /**
+     * @Route("/borrar_publicacion", name="borrar_publicacion")
+     * @param Request $request
+     * @param PoliticumDataAccess $dataAccess
+     * @return JsonResponse
+     */
+    public function borrar_publicacion(Request $request, PoliticumDataAccess $dataAccess): JsonResponse
+    {
+        $dataAccess->deletePublicacion($request->request->get("id"));
+        return new JsonResponse();
     }
 }
