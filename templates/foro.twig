@@ -2,10 +2,11 @@
 
 {% block body %}
     <div class="container">
-        <a href="" class="btn btn-primary mt-5 mb-3"><i class="fas fa-pen"></i> Crear publicación</a>
-        <div id="tableWrapper" class="mt-3">
+        <a href="{{ path('crear_publicacion') }}" class="btn btn-primary mt-5"><i class="fas fa-pen"></i> Crear publicación</a>
+        <div id="tableWrapper" class="mt-4">
             {% include 'foro_table.twig' %}
         </div>
+        <a href="{{ path('crear_publicacion') }}" class="btn btn-primary mt-3"><i class="fas fa-pen"></i> Crear publicación</a>
     </div>
 {% endblock %}
 

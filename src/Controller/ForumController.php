@@ -50,6 +50,31 @@ class ForumController extends AbstractController {
     }
 
     /**
+     * @Route("/foro/crear_publicacion", name="crear_publicacion")
+     * @param PoliticumDataAccess $dataAccess
+     * @param Request $request
+     * @return Response
+     */
+    public function crear_publicacion(PoliticumDataAccess $dataAccess, Request $request){
+        $form = $this->createForm(PublicacionType::class, new Publicacion());
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (!$dataAccess->createPublicacion($form->getData(), $this->getUser()->getId())) {
+                $this->addFlash("success", "La publicación se ha creado correctamete");
+                return $this->redirectToRoute("foro");
+            } else {
+                $this->addFlash("danger", "Hubo un error con la conexión a internet. Por favor, inténtalo de nuevo más tarde.");
+            }
+        }
+
+        return $this->render('gestionar_publicacion.twig', [
+            'form' => $form->createView(),
+            'operacion' => "Crear"
+        ]);
+    }
+
+    /**
      * @Route("/borrar_publicacion", name="borrar_publicacion")
      * @param Request $request
      * @param PoliticumDataAccess $dataAccess

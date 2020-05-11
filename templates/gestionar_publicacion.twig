@@ -2,8 +2,18 @@
 
 {% block body %}
     <div class="container my-5">
-        <h2 class="mb-4">{{ operacion }} publicación</h2>
-        {{ form(form) }}
+        <div class="card mt-5 p-4 border-danger">
+            <h4 class="mb-4">Normas para la publicación</h4>
+            <ol>
+                <li>Los administradores y moderadores nos reservamos el derecho de editar, borrar, mover, bloquear mensajes y/o tópicos que no cumplan con las normas aquí expuestas. Estas acciones se realizarán sin aviso y sin necesidad de explicación.</li>
+                <li>El incumplimiento de alguna norma de nuestra comunidad, al igual que alguna ofensa, agresión (insulto u otro) dirigido a alguno de nuestros miembros, podría resultar en la expulsión del usuario agresor y la eliminación de los mensajes relacionados o de todos ellos, así como el bloqueo de la IP, si el administrador lo considerase oportuno.</li>
+                <li>Los usuarios de nuestra comunidad no pueden publicar en sus mensajes productos, servicios, enlaces, contenidos o cualquier otro tipo de información que haga referencia a una empresa o sitio web con la intención de hacer publicidad. Ni en los textos, ni en las firmas.</li>
+            </ol>
+        </div>
+        <div class="card mt-5 p-4 border-info">
+            <h2 class="mb-4">{{ operacion }} publicación</h2>
+            {{ form(form) }}
+        </div>
     </div>
 {% endblock %}
 
