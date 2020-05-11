@@ -101,5 +101,6 @@ class PoliticumDataAccess extends DataAccess {
 
     public function deletePublicacion(int $id)
     {
+        parent::executeSQL("DELETE FROM publicaciones WHERE id = :id", ["id" => $id]);
     }
 }

@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @IsGranted("ROLE_USER")
@@ -82,6 +83,13 @@ class ForumController extends AbstractController {
      */
     public function borrar_publicacion(Request $request, PoliticumDataAccess $dataAccess): JsonResponse
     {
+        if (!$request->request->has("id") ||
+            !$dataAccess->getPublicacion($request->request->get("id")) ||
+            ($dataAccess->getPublicacion($request->request->get("id"))["id_usuario"] != $this->getUser()->getId() &&
+                !$this->isGranted("ROLE_ADMIN"))) {
+            throw new AccessDeniedException();
+        }
+
         $dataAccess->deletePublicacion($request->request->get("id"));
         return new JsonResponse();
     }

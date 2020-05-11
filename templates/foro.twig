@@ -17,16 +17,21 @@
 {% block js %}
     <script type="text/javascript">
         function deletePublicacion(id) {
-            $.ajax({
-                method: 'POST',
-                url: '{{ path('borrar_publicacion') }}',
-                data: {
-                    "id" : id,
-                },
-                success: function(data) {
-                    console.log(data)
-                },
-                error: function() {
+            bootbox.confirm("¿Seguro que deseas borrar la publicación?", function (result) {
+                if (result) {
+                    $.ajax({
+                        method: 'POST',
+                        url: '{{ path('borrar_publicacion') }}',
+                        data: {
+                            "id": id,
+                        },
+                        success: function (data) {
+                            console.log(data)
+                        },
+                        error: function () {
+                            bootbox.alert("Hubo un error al borrar la publicación. Por favor, inténtalo de nuevo más tarde.")
+                        }
+                    });
                 }
             });
         }
