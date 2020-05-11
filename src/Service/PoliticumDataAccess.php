@@ -5,6 +5,8 @@ namespace App\Service;
 use App\Entity\Publicacion;
 use App\Entity\Respuesta;
 use App\Entity\User;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class PoliticumDataAccess extends DataAccess {
     public function getUsers()
@@ -12,6 +14,12 @@ class PoliticumDataAccess extends DataAccess {
         return parent::indexRowByCod(parent::executeSQL("SELECT * FROM usuarios;"));
     }
 
+    public function getUser($id)
+    {
+        return parent::executeSQL("SELECT * FROM usuarios WHERE id = :id;", [
+            "id" => $id
+        ])->fetch();
+    }
 
     public function createUser(User $user)
     {
@@ -52,14 +60,6 @@ class PoliticumDataAccess extends DataAccess {
         );
     }
 
-    public function getUser($id)
-    {
-        return parent::executeSQL("SELECT * FROM usuarios WHERE id = :id;", [
-            "id" => $id
-        ])->fetch();
-    }
-
-
     public function getPublicaciones()
     {
         return parent::executeSQL("SELECT * FROM publicaciones ORDER BY fecha DESC;")->fetchAll();
@@ -98,6 +98,20 @@ class PoliticumDataAccess extends DataAccess {
             "id_usuario" => $id_usuario
         ]);
     }
+
+    /**
+     * @Route("/ver_usuario/{id}", name="ver_usuario")
+     * @param PoliticumDataAccess $dataAccess
+     * @param Request $request
+     * @param int $id
+     * @return Response
+     */
+    public function ver_usuario(PoliticumDataAccess $dataAccess, Request $request, int $id){
+        return $this->render('ver_usuario.twig', [
+            'usuario' => $dataAccess->getUser($id)
+        ]);
+    }
+
 
     public function deletePublicacion(int $id)
     {
