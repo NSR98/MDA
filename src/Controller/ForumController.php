@@ -104,7 +104,26 @@ class ForumController extends AbstractController {
      * @return Response
      */
     public function modificar_publicacion(PoliticumDataAccess $dataAccess, Request $request, int $id){
-        //A implementar en la proxima sesion de trabajo
+        if (!$dataAccess->getPublicacion($id)) {
+            $this->addFlash("danger", "La publicación a la que estabas intentando acceder no existe.");
+            return $this->redirectToRoute("index");
+        }
+        $form = $this->createForm(PublicacionType::class, new Publicacion($dataAccess->getPublicacion($id)));
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (!$dataAccess->updatePublicacion($form->getData(), $id)) {
+                $this->addFlash("success", "La publicación se ha modificado correctamete");
+                return $this->redirectToRoute("foro");
+            } else {
+                $this->addFlash("danger", "Hubo un error con la conexión a internet. Por favor, inténtalo de nuevo más tarde.");
+            }
+        }
+
+        return $this->render('gestionar_publicacion.twig', [
+            'form' => $form->createView(),
+            'operacion' => "Modificar"
+        ]);
     }
 
     /**
