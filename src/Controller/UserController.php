@@ -50,8 +50,18 @@ class UserController extends AbstractController
             $encodedPassword = $encoder->encodePassword(new User(), $user->getPassword());
             $user->setPassword($encodedPassword);
 
+            $usuarios = $dataAccess->getUsers();
+            foreach ($usuarios as $us) {
+                if ($us["user"] == $user->getUsername()) {
+                    $this->addFlash("danger", "Hubo un error. El nombre de usuario ya existe, por favor, introduce otro.");
+                    return $this->render('gestionar_usuario.twig', [
+                        'form' => $form->createView(),
+                        'crear' => true
+                    ]);
+                }
+            }
             if ($dataAccess->createUser($user)) {
-                $this->addFlash("success", "El usuario se ha creado correctamete");
+                $this->addFlash("success", "El usuario se ha creado correctamente");
                 return $this->redirectToRoute("index");
             } else {
                 $this->addFlash("danger", "Hubo un error con la conexión a internet. Por favor, inténtalo de nuevo más tarde.");
@@ -111,6 +121,16 @@ class UserController extends AbstractController
             }
 
 
+            $usuarios = $dataAccess->getUsers();
+            foreach ($usuarios as $us) {
+                if ($us["user"] == $user->getUsername()) {
+                    $this->addFlash("danger", "Hubo un error. El nombre de usuario ya existe, por favor, introduce otro.");
+                    return $this->render('gestionar_usuario.twig', [
+                        'form' => $form->createView(),
+                        'crear' => false
+                    ]);
+                }
+            }
             if ($dataAccess->updateUser($user, $id)) {
                 $this->addFlash("success", "El usuario ha sido actualizado correctamente");
                 return $this->redirectToRoute("listar_usuarios");

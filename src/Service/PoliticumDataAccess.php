@@ -113,6 +113,16 @@ class PoliticumDataAccess extends DataAccess {
     }
 
 
+    public function updatePublicacion(Publicacion $publicacion, int $id)
+    {
+        parent::executeSQL("UPDATE publicaciones SET titulo = :titulo, descripcion = :descripcion WHERE id = :id", [
+            "titulo" => $publicacion->getTitulo(),
+            "descripcion" => $publicacion->getDescripcion(),
+            "id" => $id
+        ]);
+    }
+
+
     public function deletePublicacion(int $id)
     {
         parent::executeSQL("DELETE FROM publicaciones WHERE id = :id", ["id" => $id]);
