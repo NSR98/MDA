@@ -121,7 +121,7 @@ class ForumController extends AbstractController {
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if (!$dataAccess->updatePublicacion($form->getData(), $id)) {
-                $this->addFlash("success", "La publicación se ha modificado correctamete");
+                $this->addFlash("success", "La publicación se ha modificado correctamente");
                 return $this->redirectToRoute("foro");
             } else {
                 $this->addFlash("danger", "Hubo un error con la conexión a internet. Por favor, inténtalo de nuevo más tarde.");

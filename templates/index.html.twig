@@ -12,6 +12,7 @@
         </ul>
         {% if not app.user %}
             <a href="{{ path('app_login') }}"><h6>Iniciar sesión</h6></a>
+            <a href="{{ path('registrar_usuario') }}"><h6>Registrarse</h6></a>
         {% endif %}
     </div>
 {% endblock %}

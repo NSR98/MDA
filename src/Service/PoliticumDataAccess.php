@@ -38,6 +38,23 @@ class PoliticumDataAccess extends DataAccess {
         );
     }
 
+    public function registerUser(User $user)
+    {
+        return parent::executeSQL("INSERT INTO usuarios (id, user, password, surname, name, dni, rol, email) 
+            VALUES (:id, :user, :password, :surname, :name, :dni, :rol, :email)",
+            array(
+                'id' => 0,
+                'user' => $user->getUsername(),
+                'password' => $user->getPassword(),
+                'surname' => $user->getSurname(),
+                'name' => $user->getName(),
+                'dni' => $user->getDni(),
+                'rol' => 1,
+                'email' => $user->getEmail()
+            )
+        );
+    }
+
     public function deleteUser(int $id)
     {
         return parent::executeSQL("DELETE FROM usuarios WHERE id = :id", array('id' => $id));
