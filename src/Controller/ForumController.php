@@ -90,8 +90,16 @@ class ForumController extends AbstractController {
             throw new AccessDeniedException();
         }
 
-        $dataAccess->deletePublicacion($request->request->get("id"));
-        return new JsonResponse();
+        if (!$dataAccess->deletePublicacion($request->request->get("id"))) {
+            return new JsonResponse([
+                'content' => $this->renderView('foro_table.twig', [
+                    "publicaciones" => $dataAccess->getPublicaciones(),
+                    "usuarios" => $dataAccess->getUsers()
+                ]),
+            ]);
+        } else {
+            return new JsonResponse(['content' => null]);
+        }
     }
 
 

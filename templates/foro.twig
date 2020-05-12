@@ -27,6 +27,14 @@
                         },
                         success: function (data) {
                             console.log(data)
+                            if (data.content) {
+                                bootbox.alert("Publicación borrada con éxito.");
+                                $('[data-toggle="tooltip"]').tooltip("hide");
+                                $("#tableWrapper").empty().append(data.content);
+                                $('[data-toggle="tooltip"]').tooltip();
+                            } else {
+                                bootbox.alert("Hubo un error al borrar la publicación. Por favor, inténtalo de nuevo más tarde.");
+                            }
                         },
                         error: function () {
                             bootbox.alert("Hubo un error al borrar la publicación. Por favor, inténtalo de nuevo más tarde.")
