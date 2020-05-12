@@ -157,4 +157,17 @@ class ForumController extends AbstractController {
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/ver_usuario/{id}", name="ver_usuario")
+     * @param PoliticumDataAccess $dataAccess
+     * @param Request $request
+     * @param int $id
+     * @return Response
+     */
+    public function ver_usuario(PoliticumDataAccess $dataAccess, Request $request, int $id){
+        return $this->render('ver_usuario.twig', [
+            'usuario' => $dataAccess->getUser($id)
+        ]);
+    }
 }
