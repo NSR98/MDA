@@ -1,0 +1,60 @@
+{% extends 'base/base.html.twig' %}
+
+{% block body %}
+    <div class="card mx-auto mt-5" style="max-width: 1200px;">
+        <div class="row no-gutters">
+            <div class="col-md-4">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/1024px-User_icon_2.svg.png" class="card-img" alt="user">
+            </div>
+            <div class="col-md-8 mt-5">
+                <div class="card-body">
+                    <h5 class="card-title">{{ usuario.surname }}</h5>
+                    <p class="card-text">{{ usuario.name }}</p>
+                    <p class="card-text"><small class="text-muted">{{ usuario.email }}</small></p>
+                </div>
+            </div>
+        </div>
+
+        {% if is_granted("ROLE_ADMIN") %}
+            <div class="card-footer">
+                <a href="{{ path('editar_usuario', {'id': usuario.id }) }}" class="btn btn-primary btn-sm mx-auto"><i class="fas fa-edit"></i></a>
+                <button class="btn btn-danger btn-sm mx-auto" onclick="deleteUser({{ usuario.id }})"><i class="fas fa-trash-alt"></i></button>
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock %}
+
+{% block title %}
+    Ver usuario - Politicum
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        function deleteUser(id) {
+            bootbox.confirm("¿Seguro que deseas borrar al usuario?", function(result){
+                if (result) {
+                    $.ajax({
+                        method: 'POST',
+                        url: '{{ path('borrar_usuario') }}',
+                        data: {
+                            "id" : id,
+                        },
+                        success: function(data) {
+                            if (data.content) {
+                                bootbox.alert("Usuario borrado con éxito.", function(){
+                                    window.location.replace("/MDA/listar_usuarios");
+                                });
+                            } else {
+                                bootbox.alert("Hubo un error al borrar el usuario. Por favor, inténtalo de nuevo más tarde.");
+                            }
+                        },
+                        error: function() {
+                            bootbox.alert("Hubo un error al borrar el usuario. Por favor, inténtalo de nuevo más tarde.")
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+{% endblock %}
