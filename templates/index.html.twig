@@ -1,20 +1,57 @@
 {% extends "base/base.html.twig" %}
 
 {% block body %}
-    <div class="jumbotron">
-        <h1>METODOLOGÍAS DEL DESARROLLO ÁGIL</h1>
-        <h3>Proyecto desarrollado por:</h3>
-        <ul>
-            <li>Kevin Naranjo Ruano</li>
-            <li>Airam Ortega Suárez</li>
-            <li>Álvaro Saúl Rodríguez Alemán</li>
-            <li>Nahuel Sánchez Rodríguez</li>
-        </ul>
+
+    <section class="page-section">
+        <div class="container my-5">
+            <div class="text-center">
+                <h1 class="section-heading text-uppercase">Politicum</h1>
+                <h3 class="section-subheading text-muted">Noticias y debates sobre temas políticos a nivel nacional e internacional.</h3>
+            </div>
         {% if not app.user %}
-            <a href="{{ path('app_login') }}"><h6>Iniciar sesión</h6></a>
-            <a href="{{ path('registrar_usuario') }}"><h6>Registrarse</h6></a>
+            <div class="row text-center mt-5">
+                <div class="col-md-6">
+                    <a href="{{ path('app_login') }}"><span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-sign-in-alt fa-stack-1x fa-inverse"></i></span></a>
+                    <h4 class="my-3">Iniciar sesión</h4>
+                </div>
+                <div class="col-md-6">
+                    <a href="{{ path('registrar_usuario') }}"><span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-plus fa-stack-1x fa-inverse"></i></span></a>
+                    <h4 class="my-3">Crear una cuenta</h4>
+                </div>
+            </div>
         {% endif %}
-    </div>
+        </div>
+    </section>
+
+    <section class="content-section text-center">
+        <div class="container">
+            <div class="card p-4">
+                <div class="content-section-heading">
+                    <h2 class="text-secondary mb-0">METODOLOGÍAS DEL DESARROLLO ÁGIL</h2>
+                    <h4>Proyecto desarrollado por:</h4>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+                        <span class="fa-stack fa-4x"><i class="fas fa-user-graduate"></i></span>
+                        <p>Kevin Naranjo Ruano</p>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+                        <span class="fa-stack fa-4x"><i class="fas fa-user-graduate"></i></span>
+                        <p>Airam Ortega Suárez</p>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+                        <span class="fa-stack fa-4x"><i class="fas fa-user-graduate"></i></span>
+                        <p>Álvaro Saúl Rodríguez Alemán</p>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+                        <span class="fa-stack fa-4x"><i class="fas fa-user-graduate"></i></span>
+                        <p>Nahuel Sánchez Rodríguez</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}
 
 {% block title %}

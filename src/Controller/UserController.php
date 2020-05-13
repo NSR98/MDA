@@ -8,7 +8,6 @@ use App\Form\Type\RegisterUserType;
 use App\Form\Type\UserEditType;
 use App\Form\Type\UserType;
 use App\Service\PoliticumDataAccess;
-use PhpParser\Node\Expr\Array_;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -63,6 +62,11 @@ class UserController extends AbstractController
                 return $this->error_formulario($form, $mensaje);
             }
 
+            if (!$this->dni_is_valid($usuarios, $user)) {
+                $mensaje = "Hubo un error. El DNI introducido ya está registrado.";
+                return $this->error_formulario($form, $mensaje);
+            }
+
             if ($dataAccess->createUser($user)) {
                 $this->addFlash("success", "El usuario se ha creado correctamente");
                 return $this->redirectToRoute("index");
@@ -99,12 +103,17 @@ class UserController extends AbstractController
             $usuarios = $dataAccess->getUsers();
             if (!$this->username_is_valid($usuarios, $user)) {
                 $mensaje = "Hubo un error. El nombre de usuario ya existe, por favor, introduce otro.";
-                return $this->error_formulario($form, $mensaje);
+                return $this->error_formulario_registro($form, $mensaje);
             }
 
             if (!$this->email_is_valid($usuarios, $user)) {
                 $mensaje = "Hubo un error. El email ya existe, por favor, introduce otro.";
-                return $this->error_formulario($form, $mensaje);
+                return $this->error_formulario_registro($form, $mensaje);
+            }
+
+            if (!$this->dni_is_valid($usuarios, $user)) {
+                $mensaje = "Hubo un error. El DNI introducido ya está registrado.";
+                return $this->error_formulario_registro($form, $mensaje);
             }
 
             if ($dataAccess->registerUser($user)) {
@@ -158,6 +167,7 @@ class UserController extends AbstractController
         $user_actual = new User($dataAccess->getUser($id));
         $id_actual = $user_actual->getId();
         $email_actual = $user_actual->getEmail();
+        $dni_actual = $user_actual->getDni();
         $form = $this->createForm(UserEditType::class, $user_actual);
 
         $form->handleRequest($request);
@@ -177,6 +187,11 @@ class UserController extends AbstractController
 
             if (!$this->email_is_valid($usuarios, $user) && $user->getEmail() != $email_actual) {
                 $mensaje = "Hubo un error. El email ya existe, por favor, introduce otro.";
+                return $this->error_formulario($form, $mensaje);
+            }
+
+            if (!$this->dni_is_valid($usuarios, $user) && $user->getDni() != $dni_actual) {
+                $mensaje = "Hubo un error. El DNI introducido ya está registrado.";
                 return $this->error_formulario($form, $mensaje);
             }
 
@@ -205,6 +220,15 @@ class UserController extends AbstractController
         ]);
     }
 
+    public function error_formulario_registro($form, String $mensaje)
+    {
+        $this->addFlash("danger", $mensaje);
+        return $this->render('registrar_usuario.twig', [
+            'form' => $form->createView(),
+            'crear' => true
+        ]);
+    }
+
     public function username_is_valid(array $usuarios, User $user)
     {
         foreach ($usuarios as $us) {
@@ -219,6 +243,16 @@ class UserController extends AbstractController
     {
         foreach ($usuarios as $us) {
             if ($us["email"] == $user->getEmail()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function dni_is_valid(array $usuarios, User $user)
+    {
+        foreach ($usuarios as $us) {
+            if ($us["dni"] == $user->getDni()) {
                 return false;
             }
         }
