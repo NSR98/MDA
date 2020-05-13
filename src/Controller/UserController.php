@@ -8,6 +8,7 @@ use App\Form\Type\RegisterUserType;
 use App\Form\Type\UserEditType;
 use App\Form\Type\UserType;
 use App\Service\PoliticumDataAccess;
+use PhpParser\Node\Expr\Array_;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -52,21 +53,16 @@ class UserController extends AbstractController
             $user->setPassword($encodedPassword);
 
             $usuarios = $dataAccess->getUsers();
-            foreach ($usuarios as $us) {
-                if ($us["user"] == $user->getUsername()) {
-                    $this->addFlash("danger", "Hubo un error. El nombre de usuario ya existe, por favor, introduce otro.");
-                    return $this->render('gestionar_usuario.twig', [
-                        'form' => $form->createView(),
-                        'crear' => true
-                    ]);
-                } else if ($us["email"] == $user->getEmail()) {
-                    $this->addFlash("danger", "Hubo un error. El email ya existe, por favor, introduce otro.");
-                    return $this->render('gestionar_usuario.twig', [
-                        'form' => $form->createView(),
-                        'crear' => true
-                    ]);
-                }
+            if (!$this->username_is_valid($usuarios, $user)) {
+                $mensaje = "Hubo un error. El nombre de usuario ya existe, por favor, introduce otro.";
+                return $this->error_formulario($form, $mensaje);
             }
+
+            if (!$this->email_is_valid($usuarios, $user)) {
+                $mensaje = "Hubo un error. El email ya existe, por favor, introduce otro.";
+                return $this->error_formulario($form, $mensaje);
+            }
+
             if ($dataAccess->createUser($user)) {
                 $this->addFlash("success", "El usuario se ha creado correctamente");
                 return $this->redirectToRoute("index");
@@ -101,18 +97,14 @@ class UserController extends AbstractController
             $user->setPassword($encodedPassword);
 
             $usuarios = $dataAccess->getUsers();
-            foreach ($usuarios as $us) {
-                if ($us["user"] == $user->getUsername()) {
-                    $this->addFlash("danger", "Hubo un error. El nombre de usuario ya existe, por favor, introduce otro.");
-                    return $this->render('registrar_usuario.twig', [
-                        'form' => $form->createView()
-                    ]);
-                } else if ($us["email"] == $user->getEmail()) {
-                    $this->addFlash("danger", "Hubo un error. El email ya existe, por favor, introduce otro.");
-                    return $this->render('registrar_usuario.twig', [
-                        'form' => $form->createView()
-                    ]);
-                }
+            if (!$this->username_is_valid($usuarios, $user)) {
+                $mensaje = "Hubo un error. El nombre de usuario ya existe, por favor, introduce otro.";
+                return $this->error_formulario($form, $mensaje);
+            }
+
+            if (!$this->email_is_valid($usuarios, $user)) {
+                $mensaje = "Hubo un error. El email ya existe, por favor, introduce otro.";
+                return $this->error_formulario($form, $mensaje);
             }
 
             if ($dataAccess->registerUser($user)) {
@@ -163,7 +155,10 @@ class UserController extends AbstractController
      */
     public function editar_usuario(int $id, Request $request, PoliticumDataAccess $dataAccess, UserPasswordEncoderInterface $encoder): Response
     {
-        $form = $this->createForm(UserEditType::class, new User($dataAccess->getUser($id)));
+        $user_actual = new User($dataAccess->getUser($id));
+        $id_actual = $user_actual->getId();
+        $email_actual = $user_actual->getEmail();
+        $form = $this->createForm(UserEditType::class, $user_actual);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -174,23 +169,17 @@ class UserController extends AbstractController
                 $user->setPassword($encodedPassword);
             }
 
-
             $usuarios = $dataAccess->getUsers();
-            foreach ($usuarios as $us) {
-                if ($us["user"] == $user->getUsername()) {
-                    $this->addFlash("danger", "Hubo un error. El nombre de usuario ya existe, por favor, introduce otro.");
-                    return $this->render('gestionar_usuario.twig', [
-                        'form' => $form->createView(),
-                        'crear' => false
-                    ]);
-                } else if ($us["email"] == $user->getEmail()) {
-                    $this->addFlash("danger", "Hubo un error. El email ya existe, por favor, introduce otro.");
-                    return $this->render('gestionar_usuario.twig', [
-                        'form' => $form->createView(),
-                        'crear' => false
-                    ]);
-                }
+            if (!$this->username_is_valid($usuarios, $user) && $user->getId() != $id_actual) {
+                $mensaje = "Hubo un error. El nombre de usuario ya existe, por favor, introduce otro.";
+                return $this->error_formulario($form, $mensaje);
             }
+
+            if (!$this->email_is_valid($usuarios, $user) && $user->getEmail() != $email_actual) {
+                $mensaje = "Hubo un error. El email ya existe, por favor, introduce otro.";
+                return $this->error_formulario($form, $mensaje);
+            }
+
             if ($dataAccess->updateUser($user, $id)) {
                 $this->addFlash("success", "El usuario ha sido actualizado correctamente");
                 return $this->redirectToRoute("listar_usuarios");
@@ -204,5 +193,35 @@ class UserController extends AbstractController
             'form' => $form->createView(),
             'crear' => false
         ]);
+    }
+
+
+    public function error_formulario($form, String $mensaje)
+    {
+        $this->addFlash("danger", $mensaje);
+        return $this->render('gestionar_usuario.twig', [
+            'form' => $form->createView(),
+            'crear' => true
+        ]);
+    }
+
+    public function username_is_valid(array $usuarios, User $user)
+    {
+        foreach ($usuarios as $us) {
+            if ($us["user"] == $user->getUsername()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function email_is_valid(array $usuarios, User $user)
+    {
+        foreach ($usuarios as $us) {
+            if ($us["email"] == $user->getEmail()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

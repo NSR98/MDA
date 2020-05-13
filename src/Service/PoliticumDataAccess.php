@@ -106,6 +106,15 @@ class PoliticumDataAccess extends DataAccess {
         ]);
     }
 
+    public function updatePublicacion(Publicacion $publicacion, int $id)
+    {
+        parent::executeSQL("UPDATE publicaciones SET titulo = :titulo, descripcion = :descripcion WHERE id = :id", [
+            "titulo" => $publicacion->getTitulo(),
+            "descripcion" => $publicacion->getDescripcion(),
+            "id" => $id
+        ]);
+    }
+
     public function createPublicacion(Publicacion $publicacion, int $id_usuario)
     {
         parent::executeSQL("INSERT INTO publicaciones(titulo, descripcion, fecha, id_usuario) VALUES (:titulo, :descripcion, :fecha, :id_usuario);", [
@@ -126,16 +135,6 @@ class PoliticumDataAccess extends DataAccess {
     public function ver_usuario(PoliticumDataAccess $dataAccess, Request $request, int $id){
         return $this->render('ver_usuario.twig', [
             'usuario' => $dataAccess->getUser($id)
-        ]);
-    }
-
-
-    public function updatePublicacion(Publicacion $publicacion, int $id)
-    {
-        parent::executeSQL("UPDATE publicaciones SET titulo = :titulo, descripcion = :descripcion WHERE id = :id", [
-            "titulo" => $publicacion->getTitulo(),
-            "descripcion" => $publicacion->getDescripcion(),
-            "id" => $id
         ]);
     }
 

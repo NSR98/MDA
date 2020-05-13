@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -13,6 +12,8 @@ class PublicacionEditType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
+
         $builder
             ->add("titulo", TextType::class, [
                 "label" => "Título"

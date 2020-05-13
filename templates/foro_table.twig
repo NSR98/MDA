@@ -12,6 +12,7 @@
             <td>{{ publicacion.fecha }}</td>
             <td>
                 <a href="{{ path('ver_publicacion', {"id" : publicacion.id}) }}" class="btn btn-sm btn-primary"><i class="fa fas fa-eye"></i></a>
+
                 {% if is_granted("ROLE_ADMIN") %}
                     <a href="{{ path('modificar_publicacion', {"id" : publicacion.id}) }}" class="btn btn-sm btn-primary"><i class="fa fas fa-edit"></i></a>
                 {% endif %}
