@@ -8,6 +8,17 @@
             <li class="nav-item {% if app.request.attributes.get('_route') == "index" %}active{% endif %}">
                 <a href="{{ path('index') }}" class="nav-link">Inicio <i class="fas fa-home"></i></a>
             </li>
+
+            {% if is_granted("ROLE_USER") %}
+                <li class="nav-item {% if app.request.attributes.get('_route') == "ver_usuario" %}active{% endif %}">
+                    <a href="{{ path("ver_usuario", {'id': app.user.id }) }}" class="nav-link">Mi perfil <i class="fas fa-user"></i></a>
+                </li>
+            {% endif %}
+
+            <li class="nav-item {% if app.request.attributes.get('_route') == "foro" %}active{% endif %}">
+                <a href="{{ path("foro") }}" class="nav-link">Foro <i class="fas fa-comment-alt"></i></a>
+            </li>
+
             {% if is_granted("ROLE_ADMIN") %}
                 <li class="nav-item {% if app.request.attributes.get('_route') == "crear_usuario" %}active{% endif %}">
                     <a href="{{ path("crear_usuario") }}" class="nav-link">Crear usuario <i class="fas fa-user-plus"></i></a>
@@ -16,9 +27,7 @@
                     <a href="{{ path("listar_usuarios") }}" class="nav-link">Listar usuarios <i class="fas fa-users"></i></a>
                 </li>
             {% endif %}
-            <li class="nav-item {% if app.request.attributes.get('_route') == "foro" %}active{% endif %}">
-                <a href="{{ path("foro") }}" class="nav-link">Foro <i class="fas fa-comment-alt"></i></a>
-            </li>
+
         </ul>
     </div>
     {%  if is_granted("ROLE_USER")  %}
