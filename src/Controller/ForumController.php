@@ -161,6 +161,35 @@ class ForumController extends AbstractController {
     }
 
     /**
+     * @Route("/borrar_respuesta", name="borrar_respuesta")
+     * @param Request $request
+     * @param PoliticumDataAccess $dataAccess
+     * @return JsonResponse
+     */
+    public function borrar_respuesta(Request $request, PoliticumDataAccess $dataAccess): JsonResponse
+    {
+        dump($request->request->get("id"));
+        if (!$request->request->has("id") ||
+            !$dataAccess->getRespuesta($request->request->get("id")) ||
+            ($dataAccess->getRespuesta($request->request->get("id"))["id_usuario"] != $this->getUser()->getId() &&
+                !$this->isGranted("ROLE_ADMIN"))) {
+            throw new AccessDeniedException();
+        }
+        $id_publicacion = $dataAccess->getRespuesta($request->request->get("id"))["id_publicacion"];
+        if (!$dataAccess->deleteRespuesta($request->request->get("id"))) {
+            return new JsonResponse([
+                'content' => $this->renderView('ver_publicacion.twig', [
+                    "publicacion" => $dataAccess->getPublicacion($id_publicacion),
+                    "respuestas" => $dataAccess->getRespuestas($request->request->get("id")),
+                    "usuarios" => $dataAccess->getUsers()
+                ]),
+            ]);
+        } else {
+            return new JsonResponse(['content' => null]);
+        }
+    }
+
+    /**
      * @Route("/ver_usuario/{id}", name="ver_usuario")
      * @param PoliticumDataAccess $dataAccess
      * @param Request $request

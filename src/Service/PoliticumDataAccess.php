@@ -96,6 +96,13 @@ class PoliticumDataAccess extends DataAccess {
         ])->fetchAll();
     }
 
+    public function getRespuesta(int $id)
+    {
+        return parent::executeSQL("SELECT * FROM respuestas WHERE id = :id", [
+            "id" => $id
+        ])->fetch();
+    }
+
     public function createRespuesta(Respuesta $respuesta, int $id_usuario, int $id_publicacion)
     {
         parent::executeSQL("INSERT INTO respuestas(id_usuario, id_publicacion, respuesta, fecha) VALUES (:id_usuario, :id_publicacion, :respuesta, :fecha);", [
@@ -138,9 +145,13 @@ class PoliticumDataAccess extends DataAccess {
         ]);
     }
 
-
     public function deletePublicacion(int $id)
     {
         parent::executeSQL("DELETE FROM publicaciones WHERE id = :id", ["id" => $id]);
+    }
+
+    public function deleteRespuesta(int $id)
+    {
+        parent::executeSQL("DELETE FROM respuestas WHERE id = :id", ["id" => $id]);
     }
 }

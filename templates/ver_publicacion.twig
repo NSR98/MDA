@@ -14,10 +14,14 @@
         <a href="{{ path('ver_usuario', {"id" : publicacion.id_usuario}) }}" class="btn btn-dark mt-3">Ver usuario</a>
 
         {% for respuesta in respuestas %}
-            <div class="card ml-5 mb-3 mt-3">
+            <div class="card ml-5 mb-3 mt-3 answer">
                 <div class="card-header">{{ usuarios[respuesta.id_usuario].name }}</div>
                 <div class="card-body">{{ respuesta.respuesta }}</div>
-                <div class="card-footer">{{ respuesta.fecha }}</div>
+                <div class="card-footer">{{ respuesta.fecha }}
+                {% if is_granted("ROLE_ADMIN") or app.user.id == respuesta.id_usuario %}
+                    <button class="btn btn-sm btn-danger float-right" onclick="deleteRespuesta({{ respuesta.id }})"><i class="fa fas fa-trash-alt"></i></button>
+                {% endif %}
+                </div>
             </div>
         {% else %}
             <h4 class="text-danger my-3">Aún no hay respuestas para este hilo, ¡Sé el primero!</h4>
@@ -31,3 +35,31 @@
     {{ publicacion.titulo }}
 {% endblock %}
 
+{% block js %}
+    <script type="text/javascript">
+        function deleteRespuesta(id) {
+            bootbox.confirm("¿Seguro que deseas borrar la respuesta?", function (result) {
+                if (result) {
+                    $.ajax({
+                        method: 'POST',
+                        url: '{{ path('borrar_respuesta') }}',
+                        data: {
+                            "id": id,
+                        },
+                        success: function (data) {
+                            console.log(data)
+                            if (data.content) {
+                                location.reload()
+                            } else {
+                                bootbox.alert("Hubo un error al borrar la respuesta. Por favor, inténtalo de nuevo más tarde.");
+                            }
+                        },
+                        error: function () {
+                            bootbox.alert("Hubo un error al borrar la respuesta. Por favor, inténtalo de nuevo más tarde.")
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+{% endblock %}
