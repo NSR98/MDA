@@ -21,6 +21,13 @@ class PoliticumDataAccess extends DataAccess {
         ])->fetch();
     }
 
+    public function getUserByUsername($username)
+    {
+        return parent::indexRowByCod(parent::executeSQL("SELECT * FROM usuarios WHERE user = :username;" , [
+            "username" => $username
+        ]));
+    }
+
     public function createUser(User $user)
     {
         return parent::executeSQL("INSERT INTO usuarios (id, user, password, surname, name, dni, rol, email) 

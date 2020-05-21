@@ -152,6 +152,17 @@ class UserController extends AbstractController
         }
     }
 
+    /**
+     * @Route("/buscar_usuario", name="buscar_usuario")
+     * @IsGranted("ROLE_USER")
+     * @param PoliticumDataAccess $dataAccess
+     * @return Response
+     */
+    public function buscar_usuario(PoliticumDataAccess $dataAccess): Response
+    {
+        //A implementar en la proxima sesion de trabajo, se deja el metodo inicializado para que no falle la barra de navegacion
+    }
+
 
     /**
      * @Route("/editar_usuario/{id}", name="editar_usuario")
