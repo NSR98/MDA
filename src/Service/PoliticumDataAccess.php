@@ -110,6 +110,13 @@ class PoliticumDataAccess extends DataAccess {
         ])->fetch();
     }
 
+    public function updateRespuesta(Respuesta $respuesta, int $id){
+        parent::executeSQL("UPDATE respuestas SET respuesta = :respuesta WHERE id = :id", [
+            "respuesta" => $respuesta->getRespuesta(),
+            "id" => $id
+        ]);
+    }
+
     public function createRespuesta(Respuesta $respuesta, int $id_usuario, int $id_publicacion)
     {
         parent::executeSQL("INSERT INTO respuestas(id_usuario, id_publicacion, respuesta, fecha) VALUES (:id_usuario, :id_publicacion, :respuesta, :fecha);", [
