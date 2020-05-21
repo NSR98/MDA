@@ -168,4 +168,12 @@ class PoliticumDataAccess extends DataAccess {
     {
         parent::executeSQL("DELETE FROM respuestas WHERE id = :id", ["id" => $id]);
     }
+
+    public function getUsuariosConConversacionesActivas(int $id)
+    {
+        return parent::executeSQL("SELECT * FROM usuarios WHERE id IN 
+                             (SELECT id_emisor FROM mensajes WHERE id_emisor = :id OR id_receptor = :id UNION 
+                             SELECT id_receptor FROM mensajes WHERE id_emisor = :id OR id_receptor = :id) 
+                             AND id <> :id;", ["id" => $id])->fetchAll();
+    }
 }

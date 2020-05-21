@@ -1,0 +1,36 @@
+{% extends 'base/base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-5">
+    {% if usuarios is empty %}
+        <h4 class="text-center text-danger">No tienes mensajes privados aún.</h4>
+    {% else %}
+        <table class="table table-primary">
+            <tr>
+                <th>Nombre de usuario</th>
+                <th>Nombre</th>
+                <th>Último mensaje</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+            </tr>
+            {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.user }}</td>
+                    <td>{{ usuario.surname }} {{ usuario.name }}</td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <a href="" class="btn btn-sm btn-primary">Ver conversación</a>
+                        <a href="" class="btn btn-sm btn-danger">Eliminar conversación</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    </div>
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+
