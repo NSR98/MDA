@@ -235,7 +235,7 @@ class UserController extends AbstractController
         if ($username_target != null && !ctype_space($username_target)) {
 
             //Redireccion a vista provisional, en la próxima sesión de trabajo se creará la vista asociada a este método.
-            return $this->render('listado_usuarios.twig', [
+            return $this->render('busqueda_usuarios.twig', [
                 'usuarios' => $dataAccess->getUserByUsername($username_target),
                 'username_target' => $username_target
             ]);

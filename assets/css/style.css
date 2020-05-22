@@ -16,6 +16,16 @@ body{
     width: 60% !important;
 }
 
+.busqueda_usuarios{
+    margin: auto !important;
+    width: 40% !important;
+}
+
+.no_user_found{
+    margin: auto !important;
+    width: 25% !important;
+}
+
 .formNewUser{
     width: 70vw;
     margin: auto;
