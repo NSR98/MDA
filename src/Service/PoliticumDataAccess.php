@@ -23,7 +23,7 @@ class PoliticumDataAccess extends DataAccess {
 
     public function getUserByUsername($username)
     {
-        return parent::indexRowByCod(parent::executeSQL("SELECT * FROM usuarios WHERE user = :username;" , [
+        return parent::indexRowByCod(parent::executeSQL("SELECT * FROM usuarios WHERE user LIKE CONCAT(:username,'%');" , [
             "username" => $username
         ]));
     }

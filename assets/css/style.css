@@ -1,3 +1,7 @@
+body{
+    background: #f8f9fa;
+}
+
 .alert-bottom {
     position: fixed;
     bottom: 5px;
@@ -6,9 +10,6 @@
     z-index: 99;
 }
 
-body{
-    background: #f8f9fa;
-}
 
 .listado_usuarios{
     margin: auto !important;
@@ -22,21 +23,6 @@ body{
     font-weight: 700;
     color: #573b7a;
 
-}
-
-.table-striped tr{
-    background-color: #c3b1cc;
-}
-
-.table-striped td{
-    padding: 1.5vh 1.5vh;
-    font-weight: 600;
-}
-.table-striped th{
-    background-color: #573b7a;
-    padding: 2vh 2vh;
-    color: white;
-    font-weight: 600;
 }
 
 .card-signin {
@@ -53,6 +39,17 @@ body{
 
 .card-signin .card-body {
     padding: 2rem;
+}
+
+.formButton{
+    background: #573b7a;
+    border-color: white;
+    color: white;
+    font-weight: 600;
+}
+#formBtn:hover{
+    background: #9672c2;
+    border-color: #2d075c;
 }
 
 .form-signin {
@@ -138,13 +135,18 @@ body{
 
 }
 
-.formButton{
-    background: #573b7a;
-    border-color: white;
-    color: white;
+
+.table-striped tr{
+    background-color: #c3b1cc;
+}
+
+.table-striped td{
+    padding: 1.5vh 1.5vh;
     font-weight: 600;
 }
-#formBtn:hover{
-    background: #9672c2;
-    border-color: #2d075c;
+.table-striped th{
+    background-color: #573b7a;
+    padding: 2vh 2vh;
+    color: white;
+    font-weight: 600;
 }

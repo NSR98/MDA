@@ -231,7 +231,18 @@ class UserController extends AbstractController
      */
     public function buscar_usuario(PoliticumDataAccess $dataAccess): Response
     {
-        //A implementar en la proxima sesion de trabajo, se deja el metodo inicializado para que no falle la barra de navegacion
+        $username_target = $_GET["username"];
+        if ($username_target != null && !ctype_space($username_target)) {
+
+            //Redireccion a vista provisional, en la próxima sesión de trabajo se creará la vista asociada a este método.
+            return $this->render('listado_usuarios.twig', [
+                'usuarios' => $dataAccess->getUserByUsername($username_target),
+                'username_target' => $username_target
+            ]);
+        } else{
+            $this->addFlash("danger", "Los términos de búsqueda introducidos tienen un formato incorrecto");
+            return $this->redirectToRoute("index");
+        }
     }
 
 
