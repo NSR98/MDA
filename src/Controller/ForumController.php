@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Publicacion;
 use App\Entity\Respuesta;
 use App\Form\Type\PublicacionType;
+use App\Form\Type\RespuestaEditType;
 use App\Form\Type\RespuestaType;
 use App\Service\PoliticumDataAccess;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -156,7 +157,8 @@ class ForumController extends AbstractController {
         }
 
         return $this->render('gestionar_respuesta.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'crear' => true
         ]);
     }
 
@@ -199,6 +201,39 @@ class ForumController extends AbstractController {
     public function ver_usuario(PoliticumDataAccess $dataAccess, Request $request, int $id){
         return $this->render('ver_usuario.twig', [
             'usuario' => $dataAccess->getUser($id)
+        ]);
+    }
+
+    /**
+     * @Route("/foro/editar_respuesta/{id}", name="editar_respuesta")
+     * @IsGranted("ROLE_ADMIN")
+     * @param PoliticumDataAccess $dataAccess
+     * @param Request $request
+     * @param int $id
+     * @return Response
+     */
+    public function editar_respuesta(PoliticumDataAccess $dataAccess, Request $request, int $id){
+        if (!$dataAccess->getRespuesta($id)) {
+            $this->addFlash("danger", "La publicación a la que estabas intentando acceder no existe.");
+            return $this->redirectToRoute("index");
+        }
+        $form = $this->createForm(RespuestaEditType::class, new Respuesta($dataAccess->getRespuesta($id)));
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (!$dataAccess->updateRespuesta($form->getData(), $id)) {
+                $this->addFlash("success", "Respuesta modificada correctamente");
+                $respuesta =  new Respuesta($dataAccess -> getRespuesta($id));
+                $idp = $respuesta -> getIdPublicacion();
+                return $this->redirectToRoute("ver_publicacion", ["id" => $idp]);
+            } else {
+                $this->addFlash("danger", "Hubo un error con la conexión a internet. Por favor, inténtalo de nuevo más tarde.");
+            }
+        }
+
+        return $this->render('gestionar_respuesta.twig', [
+            'form' => $form->createView(),
+            'crear' => false
         ]);
     }
 }

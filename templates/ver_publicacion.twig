@@ -19,6 +19,7 @@
                 <div class="card-body">{{ respuesta.respuesta }}</div>
                 <div class="card-footer">{{ respuesta.fecha }}
                 {% if is_granted("ROLE_ADMIN") or app.user.id == respuesta.id_usuario %}
+                    <a href="{{ path('editar_respuesta', {'id': respuesta.id }) }}" class="btn btn-primary btn-sm ml-1 float-right"><i class="fas fa-edit"></i></a>
                     <button class="btn btn-sm btn-danger float-right" onclick="deleteRespuesta({{ respuesta.id }})"><i class="fa fas fa-trash-alt"></i></button>
                 {% endif %}
                 </div>

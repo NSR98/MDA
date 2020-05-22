@@ -15,7 +15,6 @@
             <td>{{ usuario.email }}</td>
             <td>{{ usuario.dni }}</td>
             <td>
-
                 <a href="{{ path('editar_usuario', {'id': usuario.id }) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
                 <button class="btn btn-danger btn-sm" onclick="deleteUser({{ usuario.id }})"><i class="fas fa-trash-alt"></i></button>
             </td>

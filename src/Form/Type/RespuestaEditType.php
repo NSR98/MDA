@@ -19,7 +19,7 @@ class RespuestaEditType extends AbstractType
                 "label" => "Respuesta"
             ])
             ->add("submit", SubmitType::class, [
-                "label" => "Responder"
+                "label" => "Modificar"
             ])
             ->add("Cancelar", ResetType::class)
         ;
