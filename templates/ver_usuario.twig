@@ -17,8 +17,12 @@
 
         {% if is_granted("ROLE_ADMIN") %}
             <div class="card-footer">
-                <a href="{{ path('editar_usuario', {'id': usuario.id }) }}" class="btn btn-primary btn-sm mx-auto"><i class="fas fa-edit"></i></a>
+                <a href="{{ path('editar_usuario', {'id': usuario.id }) }}" class="btn btn-primary btn-sm mx-auto float-right"><i class="fas fa-edit"></i></a>
                 <button class="btn btn-danger btn-sm mx-auto" onclick="deleteUser({{ usuario.id }})"><i class="fas fa-trash-alt"></i></button>
+            </div>
+        {% elseif app.user.id == usuario.id %}
+            <div class="card-footer">
+                <a href="{{ path('modificar_perfil', {'id': usuario.id }) }}" class="btn btn-primary btn-sm mx-auto float-right"><i class="fas fa-edit"></i></a>
             </div>
         {% endif %}
 

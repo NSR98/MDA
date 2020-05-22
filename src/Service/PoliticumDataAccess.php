@@ -84,6 +84,21 @@ class PoliticumDataAccess extends DataAccess {
         );
     }
 
+    public function modifyUser(User $user, $id)
+    {
+        return parent::executeSQL("UPDATE usuarios SET user= :user, surname= :surname, name = :name, 
+                                        dni= :dni, email = :email WHERE id= :id",
+            [
+                'user' => $user->getUsername(),
+                'surname' => $user->getSurname(),
+                'name' => $user->getName(),
+                'dni' => $user->getDni(),
+                'email' => $user->getEmail(),
+                'id' => $id
+            ]
+        );
+    }
+
     public function getPublicaciones()
     {
         return parent::executeSQL("SELECT * FROM publicaciones ORDER BY fecha DESC;")->fetchAll();
@@ -143,19 +158,6 @@ class PoliticumDataAccess extends DataAccess {
             "descripcion" => $publicacion->getDescripcion(),
             "fecha" => date("Y-m-d H:i:s"),
             "id_usuario" => $id_usuario
-        ]);
-    }
-
-    /**
-     * @Route("/ver_usuario/{id}", name="ver_usuario")
-     * @param PoliticumDataAccess $dataAccess
-     * @param Request $request
-     * @param int $id
-     * @return Response
-     */
-    public function ver_usuario(PoliticumDataAccess $dataAccess, Request $request, int $id){
-        return $this->render('ver_usuario.twig', [
-            'usuario' => $dataAccess->getUser($id)
         ]);
     }
 

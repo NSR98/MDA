@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\Type\RegisterUserType;
 use App\Form\Type\UserEditType;
+use App\Form\Type\UserModifyType;
 use App\Form\Type\UserType;
 use App\Service\PoliticumDataAccess;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -125,9 +126,79 @@ class UserController extends AbstractController
         }
 
         return $this->render('registrar_usuario.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'registrar' => true
         ]);
     }
+
+
+    /**
+     * @Route("/modificar_perfil/{id}", name="modificar_perfil")
+     * @param int $id
+     * @param Request $request
+     * @param PoliticumDataAccess $dataAccess
+     * @param UserPasswordEncoderInterface $encoder
+     * @return Response
+     */
+    public function modificar_perfil(int $id, Request $request, PoliticumDataAccess $dataAccess, UserPasswordEncoderInterface $encoder): Response
+    {
+        $user_actual = new User($dataAccess->getUser($id));
+        $id_actual = $user_actual->getId();
+        $email_actual = $user_actual->getEmail();
+        $dni_actual = $user_actual->getDni();
+        $user_actual->setPassword(' ');
+        $form = $this->createForm(UserModifyType::class, $user_actual);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
+
+            $usuarios = $dataAccess->getUsers();
+            if (!$this->username_is_valid($usuarios, $user) && $user->getId() != $id_actual) {
+                $mensaje = "Hubo un error. El nombre de usuario ya existe, por favor, introduce otro.";
+                return $this->error_formulario($form, $mensaje);
+            }
+
+            if (!$this->email_is_valid($usuarios, $user) && $user->getEmail() != $email_actual) {
+                $mensaje = "Hubo un error. El email ya existe, por favor, introduce otro.";
+                return $this->error_formulario($form, $mensaje);
+            }
+
+            if (!$this->dni_is_valid($usuarios, $user) && $user->getDni() != $dni_actual) {
+                $mensaje = "Hubo un error. El DNI introducido ya está registrado.";
+                return $this->error_formulario($form, $mensaje);
+            }
+
+            if ($dataAccess->modifyUser($user, $id)) {
+                $this->addFlash("success", "El usuario ha sido actualizado correctamente");
+                return $this->redirectToRoute("ver_usuario", [ 'id' => $id ]);
+            } else {
+                $this->addFlash("danger", "Hubo un error con la conexión a internet. Por favor, inténtalo de nuevo más tarde.");
+
+            }
+        }
+
+        return $this->render('registrar_usuario.twig', [
+            'form' => $form->createView(),
+            'registrar' => false,
+            'usuario' => $dataAccess->getUser($id)
+        ]);
+    }
+
+
+    /**
+     * @Route("/ver_usuario/{id}", name="ver_usuario")
+     * @param PoliticumDataAccess $dataAccess
+     * @param Request $request
+     * @param int $id
+     * @return Response
+     */
+    public function ver_usuario(PoliticumDataAccess $dataAccess, Request $request, int $id){
+        return $this->render('ver_usuario.twig', [
+            'usuario' => $dataAccess->getUser($id)
+        ]);
+    }
+
 
     /**
      * @Route("/borrar_usuario", name="borrar_usuario")
