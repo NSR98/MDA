@@ -2,6 +2,7 @@
 
 {% block body %}
     <div class="container mt-5">
+        <h3 class="my-4 text-center"> Mensajes privados</h3>
     {% if usuarios is empty %}
         <h4 class="text-center text-danger">No tienes mensajes privados aún.</h4>
     {% else %}
@@ -14,14 +15,16 @@
                 <th>Acciones</th>
             </tr>
             {% for usuario in usuarios %}
+                {% set mensaje = usuario.id | getUltimoMensajeRecibido %}
                 <tr>
                     <td>{{ usuario.user }}</td>
                     <td>{{ usuario.surname }} {{ usuario.name }}</td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ mensaje.mensaje }}</td>
+                    <td>{{ mensaje.fecha }}</td>
                     <td>
-                        <a href="" class="btn btn-sm btn-primary">Ver conversación</a>
-                        <a href="" class="btn btn-sm btn-danger">Eliminar conversación</a>
+                        <a href="" class="btn btn-sm btn-primary" title="Ver conversación"><i class="fa fas fa-eye"></i></a>
+                        <a href="" class="btn btn-sm btn-danger" title="Eliminar conversación"><i class="fa fas fa-trash-alt"></i> </a>
+                        <button class="btn btn-sm btn-danger" title="Reportar usuario" onclick="reportUser({{ usuario.id }})"><i class="fas fa-exclamation-circle"></i> </button>
                     </td>
                 </tr>
             {% endfor %}
@@ -30,7 +33,60 @@
     </div>
 {% endblock %}
 
-{% block title %}
+{% block js %}
+    <script type="text/javascript">
+        function reportUser(id) {
+            bootbox.prompt({
+                title: "¿Cuál es la causa del reporte?",
+                inputType: 'select',
+                buttons: {
+                    cancel: {
+                        label: 'Cancelar',
+                    },
+                    confirm: {
+                        label: 'Reportar',
+                        className: 'btn-danger',
+                    }
+                },
+                inputOptions: [
+                    {
+                        text: 'Escoge uno...',
+                        value: '',
+                    },
+                    {
+                        text: 'Acoso',
+                        value: 'Acoso',
+                    },
+                    {
+                        text: 'Nombre ofensivo',
+                        value: 'Nombre ofensivo',
+                    },
+                    {
+                        text: 'Distribución de contenido ilegal',
+                        value: 'Distribución de contenido ilegal',
+                    },
+                    {
+                        text: 'Spam',
+                        value: 'Spam',
+                    },
+                    {
+                        text: 'Incitación al odio',
+                        value: 'Incitación al odio',
+                    },
+                ],
+                callback: function (result) {
+                    if (result) {
+                        bootbox.alert("Tu reporte se ha almacenado correctamente. Gracias por mejorar Politicum");
+                    } else if (result === "") {
+                        bootbox.alert("Debes escoger un motivo para reportar a un usuario.")
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock %}
 
+{% block title %}
+    Mensajes privados
 {% endblock %}
 

@@ -13,6 +13,9 @@
                 <li class="nav-item {% if app.request.attributes.get('_route') == "ver_usuario" %}active{% endif %}">
                     <a href="{{ path("ver_usuario", {'id': app.user.id }) }}" class="nav-link">Mi perfil <i class="fas fa-user"></i></a>
                 </li>
+                <li class="nav-item {% if app.request.attributes.get('_route') == "mensajes_privados" %}active{% endif %}">
+                    <a href="{{ path("mensajes_privados") }}" class="nav-link">Mensajes privados <i class="fas fa-envelope"></i></a>
+                </li>
             {% endif %}
 
             <li class="nav-item {% if app.request.attributes.get('_route') == "foro" %}active{% endif %}">
@@ -33,7 +36,6 @@
     {%  if is_granted("ROLE_USER")  %}
 
         <div class="collapse navbar-collapse order-3">
-
             <form class="form-inline my-2 my-lg-0" action="{{ path("buscar_usuario") }}" method="get">
                 <input name="username" id="username" class="form-control mr-sm-2" type="search" placeholder="Buscar Personas" aria-label="Search" required pattern="\S+"
                 title="El nombre no debe contener espacios en blanco">

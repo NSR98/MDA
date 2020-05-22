@@ -178,4 +178,13 @@ class PoliticumDataAccess extends DataAccess {
                              SELECT id_receptor FROM mensajes WHERE id_emisor = :id OR id_receptor = :id) 
                              AND id <> :id;", ["id" => $id])->fetchAll();
     }
+
+    public function getUltimoMensajeIntercambiado(int $id1, int $id2)
+    {
+        return parent::executeSQL("SELECT * FROM mensajes WHERE (id_emisor = :id1 AND id_receptor = :id2) OR 
+                             (id_emisor = :id2 AND id_receptor = :id1) ORDER BY fecha DESC;", [
+            "id1" => $id1,
+            "id2" => $id2
+        ])->fetch();
+    }
 }
