@@ -343,6 +343,31 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/reportar_usuario", name="reportar_usuario")
+     * @IsGranted("ROLE_USER")
+     * @param PoliticumDataAccess $dataAccess
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function reportar_usuario(PoliticumDataAccess $dataAccess, Request $request)
+    {
+        if (!$request->request->has("id_emisor") ||
+            !$request->request->has("id_reportado") ||
+            !$request->request->has("motivo")) {
+            throw new AccessDeniedException();
+        }
+
+        if ($dataAccess->reportarUsuario($request->request->get("id_emisor"),
+            $request->request->get("id_reportado"),
+            $request->request->get("motivo"))) {
+            $this->addFlash("success", "Tu reporte se ha almacenado correctamente. Gracias por mejorar Politicum");
+            return new JsonResponse(["success" => true]);
+        } else {
+            return new JsonResponse(["success" => false]);
+        }
+    }
+
 
     public function error_formulario($form, String $mensaje)
     {

@@ -76,7 +76,25 @@
                 ],
                 callback: function (result) {
                     if (result) {
-                        bootbox.alert("Tu reporte se ha almacenado correctamente. Gracias por mejorar Politicum");
+                        $.ajax({
+                            method: 'POST',
+                            url: '{{ path('reportar_usuario') }}',
+                            data: {
+                                "motivo" : result,
+                                "id_reportado" : id,
+                                "id_emisor" : {{ app.user.id }}
+                            },
+                            success: function(data) {
+                                if (data.success) {
+                                    location.reload();
+                                } else {
+                                    bootbox.alert("No puedes reportar dos veces al mismo usuario por el mismo motivo.");
+                                }
+                            },
+                            error: function() {
+                                bootbox.alert("Hubo un error al reportar al usuario. Por favor, inténtalo de nuevo más tarde.")
+                            }
+                        });
                     } else if (result === "") {
                         bootbox.alert("Debes escoger un motivo para reportar a un usuario.")
                     }

@@ -3,11 +3,10 @@
 namespace App\Service;
 
 use App\Entity\ChangePassword;
+use App\Entity\Mensaje;
 use App\Entity\Publicacion;
 use App\Entity\Respuesta;
 use App\Entity\User;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class PoliticumDataAccess extends DataAccess {
     public function getUsers()
@@ -208,5 +207,13 @@ class PoliticumDataAccess extends DataAccess {
             "id1" => $id1,
             "id2" => $id2
         ])->fetch();
+    }
+
+    public function reportarUsuario(int $id_emisor, int $id_reportado, string $motivo) {
+        return parent::executeSQL("INSERT INTO reportes (id_reportado, id_emisor, motivo) VALUES (:id_reportado, :id_emisor, :motivo);", [
+            "id_reportado" => $id_reportado,
+            "id_emisor" => $id_emisor,
+            "motivo" => $motivo
+        ]);
     }
 }

@@ -7,7 +7,11 @@
         <div class="card mt-3 mb-3" style="background-color: #e2daff;">
             <div class="card-header">{{ usuarios[publicacion.id_usuario].name }}</div>
             <div class="card-body">{{ publicacion.descripcion }}</div>
-            <div class="card-footer">{{ publicacion.fecha }}</div>
+            <div class="card-footer">{{ publicacion.fecha }}
+                {% if app.user.id != publicacion.id_usuario %}
+                    <button class="btn btn-sm btn-danger float-right" title="Reportar usuario" onclick="reportUser({{ publicacion.id_usuario }}, 'publicación')"><i class="fas fa-exclamation-circle"></i> </button>
+                {% endif %}
+            </div>
         </div>
 
         <a href="{{ path('crear_respuesta', {"id" : publicacion.id}) }}" class="btn btn-primary mt-3">Añadir respuesta</a>
@@ -20,7 +24,10 @@
                 <div class="card-footer">{{ respuesta.fecha }}
                 {% if is_granted("ROLE_ADMIN") or app.user.id == respuesta.id_usuario %}
                     <a href="{{ path('editar_respuesta', {'id': respuesta.id }) }}" class="btn btn-primary btn-sm ml-1 float-right"><i class="fas fa-edit"></i></a>
-                    <button class="btn btn-sm btn-danger float-right" onclick="deleteRespuesta({{ respuesta.id }})"><i class="fa fas fa-trash-alt"></i></button>
+                    <button class="btn btn-sm btn-danger float-right ml-1" onclick="deleteRespuesta({{ respuesta.id }})"><i class="fa fas fa-trash-alt"></i></button>
+                {% endif %}
+                {% if app.user.id != respuesta.id_usuario %}
+                    <button class="btn btn-sm btn-danger float-right" title="Reportar usuario" onclick="reportUser({{ respuesta.id_usuario }}, 'respuesta')"><i class="fas fa-exclamation-circle"></i> </button>
                 {% endif %}
                 </div>
             </div>
@@ -59,6 +66,114 @@
                             bootbox.alert("Hubo un error al borrar la respuesta. Por favor, inténtalo de nuevo más tarde.")
                         }
                     });
+                }
+            });
+        }
+    </script>
+    <script type="text/javascript">
+
+        function reportUser(id, type) {
+            var inputOptions;
+            if (type === "respuesta") {
+                inputOptions = [
+                    {
+                        text: 'Escoge uno...',
+                        value: '',
+                    },
+                    {
+                        text: 'Respuesta ofensiva',
+                        value: 'Respuesta ofensiva',
+                    },
+                    {
+                        text: 'Acoso',
+                        value: 'Acoso',
+                    },
+                    {
+                        text: 'Nombre ofensivo',
+                        value: 'Nombre ofensivo',
+                    },
+                    {
+                        text: 'Distribución de contenido ilegal',
+                        value: 'Distribución de contenido ilegal',
+                    },
+                    {
+                        text: 'Spam',
+                        value: 'Spam',
+                    },
+                    {
+                        text: 'Incitación al odio',
+                        value: 'Incitación al odio',
+                    },
+                ];
+            } else {
+                inputOptions = [
+                    {
+                        text: 'Escoge uno...',
+                        value: '',
+                    },
+                    {
+                        text: 'Título de la publicación ofensivo',
+                        value: 'Título de la publicación ofensivo',
+                    },
+                    {
+                        text: 'Acoso',
+                        value: 'Acoso',
+                    },
+                    {
+                        text: 'Nombre ofensivo',
+                        value: 'Nombre ofensivo',
+                    },
+                    {
+                        text: 'Distribución de contenido ilegal',
+                        value: 'Distribución de contenido ilegal',
+                    },
+                    {
+                        text: 'Spam',
+                        value: 'Spam',
+                    },
+                    {
+                        text: 'Incitación al odio',
+                        value: 'Incitación al odio',
+                    },
+                ];
+            }
+            bootbox.prompt({
+                title: "¿Cuál es la causa del reporte?",
+                inputType: 'select',
+                buttons: {
+                    cancel: {
+                        label: 'Cancelar',
+                    },
+                    confirm: {
+                        label: 'Reportar',
+                        className: 'btn-danger',
+                    }
+                },
+                inputOptions: inputOptions,
+                callback: function (result) {
+                    if (result) {
+                        $.ajax({
+                            method: 'POST',
+                            url: '{{ path('reportar_usuario') }}',
+                            data: {
+                                "motivo" : result,
+                                "id_reportado" : id,
+                                "id_emisor" : {{ app.user.id }}
+                            },
+                            success: function(data) {
+                                if (data.success) {
+                                    location.reload();
+                                } else {
+                                    bootbox.alert("No puedes reportar dos veces al mismo usuario por el mismo motivo.");
+                                }
+                            },
+                            error: function() {
+                                bootbox.alert("Hubo un error al reportar al usuario. Por favor, inténtalo de nuevo más tarde.")
+                            }
+                        });
+                    } else if (result === "") {
+                        bootbox.alert("Debes escoger un motivo para reportar a un usuario.")
+                    }
                 }
             });
         }
