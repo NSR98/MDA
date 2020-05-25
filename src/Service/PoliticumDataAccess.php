@@ -161,6 +161,16 @@ class PoliticumDataAccess extends DataAccess {
         ]);
     }
 
+    public function createMensaje(Mensaje $mensaje, int $id_emisor, int $id_receptor)
+    {
+        parent::executeSQL("INSERT INTO mensajes(descripcion, fecha, id_emisor, id_receptor) VALUES (:descripcion, :fecha, :id_emisor, :id_receptor);", [
+            "descripcion" => $mensaje->getDescripcion(),
+            "fecha" => date("Y-m-d H:i:s"),
+            "id_emisor" => $id_emisor,
+            "id_receptor" => $id_receptor
+        ]);
+    }
+
     public function deletePublicacion(int $id)
     {
         parent::executeSQL("DELETE FROM publicaciones WHERE id = :id", ["id" => $id]);
