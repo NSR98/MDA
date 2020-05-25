@@ -34,7 +34,7 @@ class UserProvider implements UserProviderInterface
         $stmt->execute();
         $row = $stmt->fetch();
 
-        if (!$row['user'])
+        if (!$row || !$row['user'])
         {
             $exception = new UsernameNotFoundException(sprintf('Username "%s" not found in the database.', $username));
             $exception->setUsername($username);

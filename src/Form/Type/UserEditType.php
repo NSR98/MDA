@@ -46,8 +46,6 @@ class UserEditType extends AbstractType
             ])
             ->add("Enviar", SubmitType::class, [
                 "label" => "Editar"
-            ])
-            ->add("Limpiar", ResetType::class)
-        ;
+            ]);
     }
 }

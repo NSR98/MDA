@@ -22,7 +22,7 @@
             </div>
         {% elseif app.user.id == usuario.id %}
             <div class="card-footer">
-                <a href="{{ path('modificar_perfil', {'id': usuario.id }) }}" class="btn btn-primary btn-sm mx-auto float-right"><i class="fas fa-edit"></i></a>
+                <a href="{{ path('modificar_perfil', {'id': usuario.id }) }}" class="btn btn-primary btn-sm mx-auto float-right">Modificar perfil</a>
             </div>
         {% endif %}
 

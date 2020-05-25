@@ -31,7 +31,6 @@ class UserModifyType extends AbstractType
             ])
             ->add("Enviar", SubmitType::class, [
                 "label" => "Guardar cambios"
-            ])
-            ->add("Limpiar", ResetType::class);
+            ]);
     }
 }

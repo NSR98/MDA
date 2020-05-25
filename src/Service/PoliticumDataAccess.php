@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\ChangePassword;
 use App\Entity\Publicacion;
 use App\Entity\Respuesta;
 use App\Entity\User;
@@ -94,6 +95,17 @@ class PoliticumDataAccess extends DataAccess {
                 'name' => $user->getName(),
                 'dni' => $user->getDni(),
                 'email' => $user->getEmail(),
+                'id' => $id
+            ]
+        );
+    }
+
+    public function modifyUserPassword(ChangePassword $change, $id)
+    {
+        dump($change->getNewPassword());
+        return parent::executeSQL("UPDATE usuarios SET password= :password WHERE id= :id",
+            [
+                'password' => $change->getNewPassword(),
                 'id' => $id
             ]
         );

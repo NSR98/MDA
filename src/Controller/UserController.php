@@ -3,7 +3,9 @@
 
 namespace App\Controller;
 
+use App\Entity\ChangePassword;
 use App\Entity\User;
+use App\Form\Type\PasswordModifyType;
 use App\Form\Type\RegisterUserType;
 use App\Form\Type\UserEditType;
 use App\Form\Type\UserModifyType;
@@ -83,7 +85,6 @@ class UserController extends AbstractController
     }
 
 
-
     /**
      * @Route("/registrar_usuario", name="registrar_usuario")
      * @param PoliticumDataAccess $dataAccess
@@ -126,8 +127,7 @@ class UserController extends AbstractController
         }
 
         return $this->render('registrar_usuario.twig', [
-            'form' => $form->createView(),
-            'registrar' => true
+            'form' => $form->createView()
         ]);
     }
 
@@ -146,6 +146,7 @@ class UserController extends AbstractController
         $id_actual = $user_actual->getId();
         $email_actual = $user_actual->getEmail();
         $dni_actual = $user_actual->getDni();
+        $username_actual = $user_actual->getUsername();
         $user_actual->setPassword(' ');
         $form = $this->createForm(UserModifyType::class, $user_actual);
 
@@ -154,19 +155,19 @@ class UserController extends AbstractController
             $user = $form->getData();
 
             $usuarios = $dataAccess->getUsers();
-            if (!$this->username_is_valid($usuarios, $user) && $user->getId() != $id_actual) {
+            if (!$this->username_is_valid($usuarios, $user) && $user->getUsername() != $username_actual) {
                 $mensaje = "Hubo un error. El nombre de usuario ya existe, por favor, introduce otro.";
-                return $this->error_formulario($form, $mensaje);
+                return $this->error_formulario_modificar_perfil($form, $mensaje);
             }
 
             if (!$this->email_is_valid($usuarios, $user) && $user->getEmail() != $email_actual) {
                 $mensaje = "Hubo un error. El email ya existe, por favor, introduce otro.";
-                return $this->error_formulario($form, $mensaje);
+                return $this->error_formulario_modificar_perfil($form, $mensaje);
             }
 
             if (!$this->dni_is_valid($usuarios, $user) && $user->getDni() != $dni_actual) {
                 $mensaje = "Hubo un error. El DNI introducido ya está registrado.";
-                return $this->error_formulario($form, $mensaje);
+                return $this->error_formulario_modificar_perfil($form, $mensaje);
             }
 
             if ($dataAccess->modifyUser($user, $id)) {
@@ -174,13 +175,51 @@ class UserController extends AbstractController
                 return $this->redirectToRoute("ver_usuario", [ 'id' => $id ]);
             } else {
                 $this->addFlash("danger", "Hubo un error con la conexión a internet. Por favor, inténtalo de nuevo más tarde.");
-
             }
         }
 
-        return $this->render('registrar_usuario.twig', [
+        return $this->render('modificar_perfil.twig', [
             'form' => $form->createView(),
-            'registrar' => false,
+            'usuario' => $dataAccess->getUser($id)
+        ]);
+    }
+
+
+    /**
+     * @Route("/cambiar_contraseña/{id}", name="cambiar_contraseña")
+     * @param int $id
+     * @param Request $request
+     * @param PoliticumDataAccess $dataAccess
+     * @param UserPasswordEncoderInterface $encoder
+     * @return Response
+     */
+    public function cambiar_contraseña(int $id, Request $request, PoliticumDataAccess $dataAccess, UserPasswordEncoderInterface $encoder): Response
+    {
+        $user = new User($dataAccess->getUser($id));
+        $old_password = new ChangePassword();
+        $form = $this->createForm(PasswordModifyType::class, $old_password);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $change = $form->getData();
+            $encodedNewPassword = $encoder->encodePassword(new User(), $change->getNewPassword());
+            $change->setNewPassword($encodedNewPassword);
+
+            if ($encoder->isPasswordValid($user, $change->getOldPassword())) {
+                if ($dataAccess->modifyUserPassword($change, $id)) {
+                    $this->addFlash("success", "La contraseña se ha actualizado correctamente. Debe volver a iniciar sesión.");
+                    return $this->redirectToRoute("ver_usuario", [ 'id' => $id ]);
+                } else {
+                    $this->addFlash("danger", "Hubo un error con la conexión a internet. Por favor, inténtalo de nuevo más tarde.");
+                }
+            } else {
+                $this->addFlash("danger", "La contraseña actual no es correcta.");
+            }
+
+        }
+
+        return $this->render('cambiar_contraseña.twig', [
+            'form' => $form->createView(),
             'usuario' => $dataAccess->getUser($id)
         ]);
     }
@@ -192,6 +231,7 @@ class UserController extends AbstractController
      * @param Request $request
      * @param int $id
      * @return Response
+     * @IsGranted("ROLE_USER")
      */
     public function ver_usuario(PoliticumDataAccess $dataAccess, Request $request, int $id){
         return $this->render('ver_usuario.twig', [
@@ -317,8 +357,16 @@ class UserController extends AbstractController
     {
         $this->addFlash("danger", $mensaje);
         return $this->render('registrar_usuario.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    public function error_formulario_modificar_perfil($form, String $mensaje)
+    {
+        $this->addFlash("danger", $mensaje);
+        return $this->render('modificar_perfil.twig', [
             'form' => $form->createView(),
-            'crear' => true
+            'usuario' => $this->getUser()
         ]);
     }
 
