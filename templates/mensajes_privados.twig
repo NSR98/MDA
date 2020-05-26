@@ -22,7 +22,8 @@
                     <td>{{ mensaje.mensaje }}</td>
                     <td>{{ mensaje.fecha }}</td>
                     <td>
-                        <a href="" class="btn btn-sm btn-primary" title="Ver conversación"><i class="fa fas fa-eye"></i></a>
+
+                        <a href="{{ path('conversacion', {'idusername': 12 }) }}" class="btn btn-sm btn-primary" title="Ver conversación"><i class="fa fas fa-eye"></i></a>
                         <a href="" class="btn btn-sm btn-danger" title="Eliminar conversación"><i class="fa fas fa-trash-alt"></i> </a>
                         <button class="btn btn-sm btn-danger" title="Reportar usuario" onclick="reportUser({{ usuario.id }})"><i class="fas fa-exclamation-circle"></i> </button>
                     </td>
