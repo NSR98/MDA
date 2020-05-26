@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Publicacion;
 use App\Entity\Respuesta;
+use App\Entity\Mensaje;
 use App\Form\Type\PublicacionType;
 use App\Form\Type\RespuestaEditType;
 use App\Form\Type\RespuestaType;
+use App\Form\Type\MensajeType;
 use App\Service\PoliticumDataAccess;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -234,6 +236,30 @@ class ForumController extends AbstractController {
         return $this->render('gestionar_respuesta.twig', [
             'form' => $form->createView(),
             'crear' => false
+        ]);
+    }
+
+    /**
+     * @Route("/foro/ver_usuario/{id}/crear_mensaje", name="crear_mensaje")
+     * @param PoliticumDataAccess $dataAccess
+     * @param Request $request
+     * @param int $id
+     * @return Response
+     */
+    public function crear_mensaje(PoliticumDataAccess $dataAccess, Request $request, int $id){
+        $form = $this->createForm(MensajeType::class, new Mensaje());
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (!$dataAccess->createMensaje($form->getData(), $this->getUser()->getId(), $id)) {
+                $this->addFlash("success", "Mensaje enviado correctamete");
+                return $this->redirectToRoute("mensajes_privados", array('id' => $id));
+            } else {
+                $this->addFlash("danger", "Hubo un error con la conexión a internet. Por favor, inténtalo de nuevo más tarde.");
+            }
+        }
+
+        return $this->render('gestionar_mensaje.twig', [
+            'form' => $form->createView()
         ]);
     }
 }

@@ -16,7 +16,7 @@ class MensajeType extends AbstractType
     {
         $builder
             ->add("mensaje", TextareaType::class, [
-                "label" => "Mensaje Privado"
+                "label" => "mensaje"
             ])
             ->add("submit", SubmitType::class, [
                 "label" => "Enviar"

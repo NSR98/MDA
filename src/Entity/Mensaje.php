@@ -86,11 +86,11 @@ class Mensaje {
     }
 
     /**
-     * @param mixed $descripcion
+     * @param mixed $mensaje
      */
-    public function setDescripcion( $descripcion)
+    public function setMensaje( $mensaje)
     {
-        $this->descripcion = $descripcion;
+        $this->mensaje = $mensaje;
     }
 
     /**

@@ -24,6 +24,11 @@
                 <td>{{ usuario.name }}</td>
                 <td>
                     <a href="{{ path('ver_usuario', {"id" : usuario.id}) }}" class="btn btn-sm btn-primary aling-center"><i class="far fa-address-card"></i></a>
+
+                    {% if app.user.id != usuario.id %}
+                        <a href="{{ path('crear_mensaje', {'id': usuario.id }) }}" class="btn btn-primary btn-sm mx-auto "><i class="fas fa-envelope"></i></a>
+                    {% endif %}
+
                 </td>
             </tr>
         {% endfor %}

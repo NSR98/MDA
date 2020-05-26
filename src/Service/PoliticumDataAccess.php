@@ -174,8 +174,8 @@ class PoliticumDataAccess extends DataAccess {
 
     public function createMensaje(Mensaje $mensaje, int $id_emisor, int $id_receptor)
     {
-        parent::executeSQL("INSERT INTO mensajes(descripcion, fecha, id_emisor, id_receptor) VALUES (:descripcion, :fecha, :id_emisor, :id_receptor);", [
-            "descripcion" => $mensaje->getDescripcion(),
+        parent::executeSQL("INSERT INTO mensajes(mensaje, fecha, id_emisor, id_receptor) VALUES (:mensaje, :fecha, :id_emisor, :id_receptor);", [
+            "mensaje" => $mensaje->getMensaje(),
             "fecha" => date("Y-m-d H:i:s"),
             "id_emisor" => $id_emisor,
             "id_receptor" => $id_receptor
