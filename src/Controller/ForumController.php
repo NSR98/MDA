@@ -262,4 +262,24 @@ class ForumController extends AbstractController {
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/foro/busqueda_avanzada", name="buscar_publicacion")
+     * @IsGranted("ROLE_USER")
+     * @param PoliticumDataAccess $dataAccess
+     * @param Request $request
+     * @return Response
+     */
+    public function buscar_publicacion(PoliticumDataAccess $dataAccess, Request $request){
+        if ($request->request->has("search") && $request->request->has("type")) {
+            return new JsonResponse([
+                'content' => $this->renderView('foro_table.twig', [
+                    "publicaciones" => $dataAccess->getPublicaciones(),
+                    "usuarios" => $dataAccess->getUsers()
+                ]),
+                'number_of_results' => count($dataAccess->getPublicaciones()),
+            ]);
+        }
+        return $this->render("buscar_publicacion.twig");
+    }
 }

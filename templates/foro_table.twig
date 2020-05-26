@@ -1,3 +1,6 @@
+{% if publicaciones is empty %}
+    <h4>No hay publicaciones disponibles</h4>
+{% else %}
 <table class="table table-primary">
     <tr>
         <th>Título</th>
@@ -17,16 +20,12 @@
                     <a href="{{ path('modificar_publicacion', {"id" : publicacion.id}) }}" class="btn btn-sm btn-primary"><i class="fa fas fa-edit"></i></a>
                 {% endif %}
 
-
                 {% if is_granted("ROLE_ADMIN") or app.user.id == publicacion.id_usuario %}
                     <button class="btn btn-sm btn-danger" onclick="deletePublicacion({{ publicacion.id }})"><i class="fa fas fa-trash-alt"></i></button>
                 {% endif %}
 
             </td>
         </tr>
-
-
-        {%  else %}
-        <h4>No hay publicaciones disponibles</h4>
     {% endfor %}
 </table>
+{% endif %}

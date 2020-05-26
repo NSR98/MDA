@@ -3,6 +3,7 @@
 {% block body %}
     <div class="container">
         <a href="{{ path('crear_publicacion') }}" class="btn btn-primary mt-5"><i class="fas fa-pen"></i> Crear publicación</a>
+        <a href="{{ path('buscar_publicacion') }}" class="btn btn-secondary mt-5 float-right    "><i class="fas fa-search"></i> Buscar publicación</a>
         <div id="tableWrapper" class="mt-4">
             {% include 'foro_table.twig' %}
         </div>
