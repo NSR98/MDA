@@ -122,6 +122,13 @@ class PoliticumDataAccess extends DataAccess {
         ])->fetch();
     }
 
+    public function getPublicacionesUsuario(int $id)
+    {
+        return parent::executeSQL("SELECT * FROM publicaciones WHERE id_usuario = :id", [
+            "id" => $id
+        ])->fetchAll();
+    }
+
     public function getRespuestas(int $id)
     {
         return parent::executeSQL("SELECT * FROM respuestas WHERE id_publicacion = :id ORDER BY fecha DESC", [
@@ -134,6 +141,13 @@ class PoliticumDataAccess extends DataAccess {
         return parent::executeSQL("SELECT * FROM respuestas WHERE id = :id", [
             "id" => $id
         ])->fetch();
+    }
+
+    public function getRespuestasUsuario(int $id)
+    {
+        return parent::executeSQL("SELECT * FROM respuestas WHERE id_usuario = :id", [
+            "id" => $id
+        ])->fetchAll();
     }
 
     public function updateRespuesta(Respuesta $respuesta, int $id){
