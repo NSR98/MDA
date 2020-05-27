@@ -35,6 +35,18 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/listar_usuarios_reportados", name="listar_usuarios_reportados")
+     * @IsGranted("ROLE_ADMIN")
+     * @param PoliticumDataAccess $dataAccess
+     * @return Response
+     */
+    public function listar_usuarios_reportados(PoliticumDataAccess $dataAccess): Response
+    {
+        return $this->render('listado_usuarios_reportados.twig', [
+            'usuarios' => $dataAccess->getReportedUsers()
+        ]);
+    }
 
     /**
      * @Route("/crear_usuario", name="crear_usuario")

@@ -29,6 +29,9 @@
                 <li class="nav-item {% if app.request.attributes.get('_route') == "listar_usuarios" %}active{% endif %}">
                     <a href="{{ path("listar_usuarios") }}" class="nav-link">Listar usuarios <i class="fas fa-users"></i></a>
                 </li>
+                <li class="nav-item {% if app.request.attributes.get('_route') == "listar_usuarios_reportados" %}active{% endif %}">
+                    <a href="{{ path("listar_usuarios_reportados") }}" class="nav-link btn">Usuarios reportados <i class="fas fa-exclamation-circle"></i></a>
+                </li>
             {% endif %}
 
         </ul>
