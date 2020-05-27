@@ -235,7 +235,9 @@ class UserController extends AbstractController
      */
     public function ver_usuario(PoliticumDataAccess $dataAccess, Request $request, int $id){
         return $this->render('ver_usuario.twig', [
-            'usuario' => $dataAccess->getUser($id)
+            'usuario' => $dataAccess->getUser($id),
+            'publicaciones' => $dataAccess->getPublicacionesUsuario($id),
+            'respuestas' => $dataAccess->getRespuestasUsuario($id)
         ]);
     }
 

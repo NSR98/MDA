@@ -208,7 +208,6 @@ class ForumController extends AbstractController {
 
     /**
      * @Route("/foro/editar_respuesta/{id}", name="editar_respuesta")
-     * @IsGranted("ROLE_ADMIN")
      * @param PoliticumDataAccess $dataAccess
      * @param Request $request
      * @param int $id
