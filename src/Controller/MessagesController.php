@@ -38,7 +38,6 @@ class MessagesController extends AbstractController
     {
         return $this->render("conversacion.twig", [
             "mensajes" => $dataAccess->getHiloDeMensajesPrivados($this->getUser()->getId(), $idusername),
-            "usuario" => $dataAccess->getUser($idusername),
         ]);
     }
 }

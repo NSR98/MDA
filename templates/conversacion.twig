@@ -1,0 +1,39 @@
+{% extends 'base/base.html.twig' %}
+
+{% block body %}
+<div class="container containerChat p-1 ">
+    {% set user = mensajes[0].id_emisor | getUser %}
+    {% if user.id == app.user.id%}
+        {% set user = mensajes[0].id_receptor | getUser %}
+    {% endif %}
+
+    <h2 class="mt-3 text-center">Mensajes con {{ user.user }}</h2>
+    {% for mensaje in mensajes %}
+        {% if mensaje.id_emisor == app.user.id%}
+            <div class="mensajePropio">
+                <strong class="float-left">Tú</strong>
+                <p class="textMensaje text-right p-1">{{ mensaje.mensaje }}</p>
+                <span class="time time-right p-1">{{ mensaje.fecha }}</span>
+            </div>
+        {% else %}
+            <div class="mensajeAjeno">
+                <strong class="float-right">{{ user.user }}</strong>
+                <p class="textMensaje text-left p-1" >{{ mensaje.mensaje }}</p>
+                <span class="time time-left p-1">{{ mensaje.fecha }}</span>
+            </div>
+        {% endif %}
+
+    {% endfor %}
+
+    <div class="mt-5 p-1">
+        <a href="{{ path('crear_mensaje_prueba', {'id': user.id }) }}" class="btn btn-primary"><i class="fas fa-pen"></i> Escribir</a>
+    </div>
+
+    </div>
+
+
+{% endblock %}
+
+    {% block title %}
+    Mensajes
+{% endblock %}

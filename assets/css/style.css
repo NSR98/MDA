@@ -160,3 +160,75 @@ body{
     color: white;
     font-weight: 600;
 }
+
+
+/* Clear floats */
+.container::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/* Style images */
+.container img {
+    float: left;
+    max-width: 60px;
+    width: 100%;
+    margin-right: 20px;
+    border-radius: 50%;
+}
+
+/* Style the right image */
+.container img.right {
+    float: right;
+    margin-left: 20px;
+    margin-right:0;
+}
+
+/* Style time text */
+.time-right {
+    float: right;
+    color: #aaa;
+}
+
+/* Style time text */
+.time-left {
+    float: left;
+    color: #999;
+}
+
+.time{
+    font-weight: 600;
+}
+
+.containerChat {
+    width: 30% !important;
+    margin-top: 5vh;
+    margin-left: auto;
+    margin-bottom: auto;
+    margin-right: auto;
+    background-color: #d5b9f9;
+}
+
+.mensajePropio {
+    border: 2px solid #ccc;
+    background-color: #ddd;
+    border-radius: 5px;
+    margin-top: 5vh;
+    width: 100%;
+}
+
+.mensajeAjeno {
+    border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    margin-top: 5vh;
+    width: 100%;
+}
+
+.textMensaje {
+    display: inline-block;
+    white-space: pre-wrap;
+    width: 100%;
+    overflow: hidden;
+}
