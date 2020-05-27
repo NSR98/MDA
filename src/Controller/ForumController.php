@@ -271,12 +271,24 @@ class ForumController extends AbstractController {
      */
     public function buscar_publicacion(PoliticumDataAccess $dataAccess, Request $request){
         if ($request->request->has("search") && $request->request->has("type")) {
+            if (empty($request->request->get("search"))) {
+                $publicaciones = $dataAccess->getPublicaciones();
+            } else {
+                switch ($request->request->get("type")) {
+                    case "title" :
+                        $publicaciones = $dataAccess->searchPublicacionesByTitle($request->request->get("search"));
+                        break;
+                    default :
+                        throw new AccessDeniedException();
+                }
+            }
+
             return new JsonResponse([
                 'content' => $this->renderView('foro_table.twig', [
-                    "publicaciones" => $dataAccess->getPublicaciones(),
+                    "publicaciones" => $publicaciones,
                     "usuarios" => $dataAccess->getUsers()
                 ]),
-                'number_of_results' => count($dataAccess->getPublicaciones()),
+                'number_of_results' => count($publicaciones),
             ]);
         }
         return $this->render("buscar_publicacion.twig");

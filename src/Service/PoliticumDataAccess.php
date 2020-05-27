@@ -244,4 +244,11 @@ class PoliticumDataAccess extends DataAccess {
             "motivo" => $motivo
         ]);
     }
+
+    public function searchPublicacionesByTitle(string $search)
+    {
+        return parent::executeSQL("SELECT * FROM publicaciones WHERE titulo LIKE CONCAT('%',:search,'%');" , [
+            "search" => $search
+        ])->fetchAll();
+    }
 }

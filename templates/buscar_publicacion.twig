@@ -29,6 +29,7 @@
 {% block js %}
     <script type="text/javascript">
         function buscar() {
+            $("#number_of_results").empty().append('<img src="{{ asset('assets/images/ajax-loader.gif') }}" alt="Cargando..."> Cargando...');
             $.ajax({
                 method: 'POST',
                 url: '{{ path('buscar_publicacion') }}',
@@ -37,7 +38,11 @@
                     "type": $("#type").val(),
                 },
                 success: function (data) {
-                    console.log(data)
+                    if (data.number_of_results) {
+                        $("#number_of_results").empty().append("Se han encontrado " + data.number_of_results + " resultado(s).");
+                    } else {
+                        $("#number_of_results").empty();
+                    }
                     if (data.content) {
                         $('[data-toggle="tooltip"]').tooltip("hide");
                         $("#tableWrapper").empty().append(data.content);
@@ -45,11 +50,9 @@
                     } else {
                         bootbox.alert("Hubo un error en la búsqueda. Por favor, inténtalo de nuevo más tarde.");
                     }
-                    if (data.number_of_results) {
-                        $("#number_of_results").empty().append("Se han encontrado " + data.number_of_results + " resultado(s).");
-                    }
                 },
                 error: function () {
+                    $("#number_of_results").empty()
                     bootbox.alert("Hubo un error en la búsqueda. Por favor, inténtalo de nuevo más tarde.")
                 }
             });
