@@ -10,10 +10,13 @@
             <div class="col-3">
                 <select id="type" name="type" class="custom-select">
                     <option value="title">Buscar por título</option>
+                    <option value="description">Buscar por descripción</option>
+                    <option value="author">Buscar por nombre de usuario</option>
+                    <option value="realName">Buscar por nombre real</option>
                 </select>
             </div>
             <div class="col-2">
-                <button class="btn btn-primary" onclick="buscar();"><i class="fa fas fa-search"></i> Buscar</button>
+                <button type="submit" id="submit" class="btn btn-primary w-100" onclick="buscar();"><i class="fa fas fa-search"></i> Buscar</button>
             </div>
         </div>
         <h4 id="number_of_results" class="mt-4"></h4>
@@ -28,6 +31,13 @@
 
 {% block js %}
     <script type="text/javascript">
+        $("#search").bind("keyup", function(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                $("#submit").click();
+            }
+        });
+
         function buscar() {
             $("#number_of_results").empty().append('<img src="{{ asset('assets/images/ajax-loader.gif') }}" alt="Cargando..."> Cargando...');
             $.ajax({

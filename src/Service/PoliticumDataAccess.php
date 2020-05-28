@@ -251,4 +251,27 @@ class PoliticumDataAccess extends DataAccess {
             "search" => $search
         ])->fetchAll();
     }
+
+    public function searchPublicacionesByDescription(string $search)
+    {
+        return parent::executeSQL("SELECT * FROM publicaciones WHERE descripcion LIKE CONCAT('%',:search,'%');" , [
+            "search" => $search
+        ])->fetchAll();
+    }
+
+    public function searchPublicacionesByAuthor(string $search)
+    {
+        return parent::executeSQL("SELECT * FROM publicaciones WHERE id_usuario IN 
+                                  (SELECT id FROM usuarios WHERE user LIKE CONCAT('%',:search,'%'));" , [
+            "search" => $search
+        ])->fetchAll();
+    }
+
+    public function searchPublicacionesByRealName(string $search)
+    {
+        return parent::executeSQL("SELECT * FROM publicaciones WHERE id_usuario IN 
+                                  (SELECT id FROM usuarios WHERE CONCAT(surname, ' ', name) LIKE CONCAT('%',:search,'%'));" , [
+            "search" => $search
+        ])->fetchAll();
+    }
 }

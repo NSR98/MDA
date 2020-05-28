@@ -278,6 +278,15 @@ class ForumController extends AbstractController {
                     case "title" :
                         $publicaciones = $dataAccess->searchPublicacionesByTitle($request->request->get("search"));
                         break;
+                    case "description" :
+                        $publicaciones = $dataAccess->searchPublicacionesByDescription($request->request->get("search"));
+                        break;
+                    case "author" :
+                        $publicaciones = $dataAccess->searchPublicacionesByAuthor($request->request->get("search"));
+                        break;
+                    case "realName" :
+                        $publicaciones = $dataAccess->searchPublicacionesByRealName($request->request->get("search"));
+                        break;
                     default :
                         throw new AccessDeniedException();
                 }

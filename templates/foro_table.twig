@@ -11,7 +11,7 @@
     {% for publicacion in publicaciones %}
         <tr>
             <td><a href="{{ path('ver_publicacion', {"id" : publicacion.id}) }}">{{ publicacion.titulo }}</a></td>
-            <td><a href="{{ path('ver_usuario', {"id" : publicacion.id_usuario}) }}">{{ usuarios[publicacion.id_usuario].name }}</a></td>
+            <td><a href="{{ path('ver_usuario', {"id" : publicacion.id_usuario}) }}">{{ usuarios[publicacion.id_usuario].user }}</a></td>
             <td>{{ publicacion.fecha }}</td>
             <td>
                 <a href="{{ path('ver_publicacion', {"id" : publicacion.id}) }}" class="btn btn-sm btn-primary"><i class="fa fas fa-eye"></i></a>
