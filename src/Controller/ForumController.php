@@ -263,6 +263,30 @@ class ForumController extends AbstractController {
     }
 
     /**
+     * @Route("/foro/ver_usuario/{id}/crear_mensaje_prueba", name="crear_mensaje_prueba")
+     * @param PoliticumDataAccess $dataAccess
+     * @param Request $request
+     * @param int $id
+     * @return Response
+     */
+    public function crear_mensaje_prueba(PoliticumDataAccess $dataAccess, Request $request, int $id){
+        $form = $this->createForm(MensajeType::class, new Mensaje());
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (!$dataAccess->createMensaje($form->getData(), $this->getUser()->getId(), $id)) {
+                $this->addFlash("success", "Mensaje enviado correctamete");
+                return $this->redirectToRoute("conversacion", array('idusername' => $id));
+            } else {
+                $this->addFlash("danger", "Hubo un error con la conexión a internet. Por favor, inténtalo de nuevo más tarde.");
+            }
+        }
+
+        return $this->render('gestionar_mensaje.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
      * @Route("/foro/busqueda_avanzada", name="buscar_publicacion")
      * @IsGranted("ROLE_USER")
      * @param PoliticumDataAccess $dataAccess

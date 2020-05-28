@@ -29,13 +29,19 @@ class CustomFilters extends AbstractExtension {
 
     public function getFilters() {
         return [
-            new TwigFilter('getUltimoMensajeRecibido', [$this, 'getUltimoMensajeRecibido']), // base64_encode => name of custom filter, base64_en => name of function to execute when this filter is called.
+            new TwigFilter('getUltimoMensajeRecibido', [$this, 'getUltimoMensajeRecibido']),// base64_encode => name of custom filter, base64_en => name of function to execute when this filter is called.
+            new TwigFilter('getUser', [$this, 'getUser'])
         ];
     }
 
     public function getUltimoMensajeRecibido(int $input)
     {
         return $this->dataAccess->getUltimoMensajeIntercambiado($input, $this->security->getUser()->getId());
+    }
+
+    public function getUser(int $input)
+    {
+        return $this->dataAccess->getUser($input);
     }
 
 }

@@ -1,0 +1,25 @@
+{% if usuarios is empty %}
+    <h4 class="text-center text-danger">No hay usuarios reportados.</h4>
+{% else %}
+    <table class="table-striped listado_usuarios" >
+
+        <tr>
+            <th>Nombre de usuario reportado</th>
+            <th>Nombre de usuario emisor</th>
+            <th>Motivo</th>
+            <th>Acciones</th>
+        </tr>
+        {% for usuario in usuarios %}
+            {% set usuario_reportado = usuario.id_reportado | getUser %}
+            {% set usuario_emisor = usuario.id_emisor | getUser %}
+            <tr>
+                <td>{{ usuario_reportado.user }}</td>
+                <td>{{ usuario_emisor.user }}</td>
+                <td>{{ usuario.motivo }}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="deleteUser({{ usuario.id_reportado }})"><i class="fas fa-trash-alt"></i></button>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}
