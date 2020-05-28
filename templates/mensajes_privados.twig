@@ -23,7 +23,7 @@
                     <td>{{ mensaje.fecha }}</td>
                     <td>
                         <a href="{{ path('conversacion', {'idusername': usuario.id }) }}" class="btn btn-sm btn-primary" title="Ver conversación"><i class="fa fas fa-eye"></i></a>
-                        <a href="" class="btn btn-sm btn-danger" title="Eliminar conversación"><i class="fa fas fa-trash-alt"></i> </a>
+                        <button onclick="deleteRespuesta({{ usuario.id }})" class="btn btn-sm btn-danger" title="Eliminar conversación"><i class="fa fas fa-trash-alt"></i> </button>
                         <button class="btn btn-sm btn-danger" title="Reportar usuario" onclick="reportUser({{ usuario.id }})"><i class="fas fa-exclamation-circle"></i> </button>
                     </td>
                 </tr>
@@ -98,6 +98,35 @@
                     } else if (result === "") {
                         bootbox.alert("Debes escoger un motivo para reportar a un usuario.")
                     }
+                }
+            });
+        }
+    </script>
+
+    <script type="text/javascript">
+        function deleteRespuesta(id) {
+            bootbox.confirm("¿Seguro que deseas borrar la respuesta?", function (result) {
+                if (result) {
+                    $.ajax({
+                        method: 'POST',
+                        url: '{{ path('borrar_mensajes') }}',
+                        data: {
+                            "idusername": id,
+                        },
+                        success: function (data) {
+                            if (data.content) {
+                                bootbox.alert("Usuario borrado con éxito.", function(){
+                                    location.reload();
+                                });
+
+                            } else {
+                                bootbox.alert("Hubo un error al borrar el hilo de mensajes. Por favor, inténtalo de nuevo más tarde.");
+                            }
+                        },
+                        error: function () {
+                            bootbox.alert("Entre en el else jodio. Hubo un error al borrar el hilo de mensajes. Por favor, inténtalo de nuevo más tarde.")
+                        }
+                    });
                 }
             });
         }

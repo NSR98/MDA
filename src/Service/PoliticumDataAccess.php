@@ -237,6 +237,15 @@ class PoliticumDataAccess extends DataAccess {
         ])->fetchAll();
     }
 
+    public function borrarHiloDeMensajesPrivados(int $id1, int $id2)
+    {
+        return parent::executeSQL("DELETE FROM mensajes WHERE (id_emisor = :id1 AND id_receptor = :id2) OR 
+                        (id_emisor = :id2 AND id_receptor = :id1)", [
+                            "id1" => $id1,
+                            "id2" => $id2
+                        ]);
+    }
+
     public function reportarUsuario(int $id_emisor, int $id_reportado, string $motivo) {
         return parent::executeSQL("INSERT INTO reportes (id_reportado, id_emisor, motivo) VALUES (:id_reportado, :id_emisor, :motivo);", [
             "id_reportado" => $id_reportado,
