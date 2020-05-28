@@ -19,8 +19,8 @@
             <button class="btn btn-info" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false" aria-controls="collapsePublications collapseAnswers">Ver actividad</button>
 
         {% if is_granted("ROLE_ADMIN") %}
-                <a href="{{ path('modificar_perfil', {'id': usuario.id }) }}" class="btn btn-primary float-right"><i class="fas fa-edit"></i></a>
-                <button class="btn btn-danger float-right mr-3" onclick="deleteUser({{ usuario.id }})"><i class="fas fa-trash-alt"></i></button>
+                <button class="btn btn-danger float-right " onclick="deleteUser({{ usuario.id }})"><i class="fas fa-trash-alt"></i></button>
+                <a href="{{ path('modificar_perfil', {'id': usuario.id }) }}" class="btn btn-warning float-right mr-3"><i class="fas fa-edit"></i></a>
             </div>
         {% elseif app.user.id == usuario.id %}
                 <a href="{{ path('modificar_perfil', {'id': usuario.id }) }}" class="btn btn-primary float-right">Modificar perfil</a>

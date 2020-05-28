@@ -1,0 +1,44 @@
+{% extends 'base/base.html.twig' %}
+
+{% block body %}
+    <div class="h3 text-center p-3"> Listado de usuarios reportados</div>
+    <div id="tableWrapper">
+        {% include "listado_usuarios_reportados_table.twig" %}
+    </div>
+
+{% endblock %}
+
+{% block title %}
+    Listado usuarios reportados
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        function deleteUser(id) {
+            bootbox.confirm("¿Seguro que deseas borrar al usuario?", function(result){
+                if (result) {
+                    $.ajax({
+                        method: 'POST',
+                        url: '{{ path('borrar_usuario') }}',
+                        data: {
+                            "id" : id,
+                        },
+                        success: function(data) {
+                            if (data.content) {
+                                bootbox.alert("Usuario borrado con éxito.");
+                                $('[data-toggle="tooltip"]').tooltip("hide");
+                                $("#tableWrapper").empty().append(data.content);
+                                $('[data-toggle="tooltip"]').tooltip();
+                            } else {
+                                bootbox.alert("Hubo un error al borrar el usuario. Por favor, inténtalo de nuevo más tarde.");
+                            }
+                        },
+                        error: function() {
+                            bootbox.alert("Hubo un error al borrar el usuario. Por favor, inténtalo de nuevo más tarde.")
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+{% endblock %}
