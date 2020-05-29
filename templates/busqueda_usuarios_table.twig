@@ -1,36 +1,20 @@
-{% if usuarios|length == 0%}
-    {#<div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <h3 class="al"> No hemos encontrado ningún resultado para {{ username_target }} </h3>
-    </div>#}
+{% if usuarios|length == 0 %}
     <div class="alert alert-secondary alert-dismissible fade show center no_user_found">
         <strong>¡Vaya!</strong> No hemos encontrado ningún resultado para <strong>{{ username_target }}</strong>
         <button type="button" class="close" data-dismiss="alert">&times;</button>
     </div>
 {% else %}
+    {% for usuario in usuarios %}
+        <div class="card my-3">
+            <div class="card-body">
+                <a href="{{ path('ver_usuario', {"id" : usuario.id}) }}">{{ usuario.user }}</a>
+                <p>{{ usuario.name }} {{ usuario.surname }}</p>
+                <a href="{{ path('ver_usuario', {"id" : usuario.id}) }}" class="btn btn-primary aling-center float-right"><i class="far fa-address-card"></i></a>
 
-    <table class="table-striped busqueda_usuarios" >
-        <tr>
-            <th>Nombre de usuario</th>
-            <th>Nombre</th>
-            <th>Apellidos</th>
-            <th>Acciones</th>
-        </tr>
-        {% for usuario in usuarios %}
-            <tr>
-                <td>
-                    <a href="{{ path('ver_usuario', {"id" : usuario.id}) }}">{{ usuario.user }}</a>
-                </td>
-                <td>{{ usuario.surname }}</td>
-                <td>{{ usuario.name }}</td>
-                <td>
-                    <a href="{{ path('ver_usuario', {"id" : usuario.id}) }}" class="btn btn-sm btn-primary aling-center"><i class="far fa-address-card"></i></a>
-
-                    {% if app.user.id != usuario.id %}
-                        <a href="{{ path('crear_mensaje', {'id': usuario.id }) }}" class="btn btn-primary btn-sm mx-auto "><i class="fas fa-envelope"></i></a>
-                    {% endif %}
-
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
+                {% if app.user.id != usuario.id %}
+                    <a href="{{ path('crear_mensaje', {'id': usuario.id }) }}" class="btn btn-primary float-right mr-2"><i class="fas fa-envelope"></i></a>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
 {% endif %}

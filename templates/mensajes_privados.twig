@@ -6,29 +6,23 @@
     {% if usuarios is empty %}
         <h4 class="text-center text-danger">No tienes mensajes privados aún.</h4>
     {% else %}
-        <table class="table table-primary">
-            <tr>
-                <th>Nombre de usuario</th>
-                <th>Nombre</th>
-                <th>Último mensaje</th>
-                <th>Fecha</th>
-                <th>Acciones</th>
-            </tr>
-            {% for usuario in usuarios %}
-                {% set mensaje = usuario.id | getUltimoMensajeRecibido %}
-                <tr>
-                    <td>{{ usuario.user }}</td>
-                    <td>{{ usuario.surname }} {{ usuario.name }}</td>
-                    <td>{{ mensaje.mensaje }}</td>
-                    <td>{{ mensaje.fecha }}</td>
-                    <td>
-                        <a href="{{ path('conversacion', {'idusername': usuario.id }) }}" class="btn btn-sm btn-primary" title="Ver conversación"><i class="fa fas fa-eye"></i></a>
-                        <button onclick="deleteRespuesta({{ usuario.id }})" class="btn btn-sm btn-danger" title="Eliminar conversación"><i class="fa fas fa-trash-alt"></i> </button>
-                        <button class="btn btn-sm btn-danger" title="Reportar usuario" onclick="reportUser({{ usuario.id }})"><i class="fas fa-exclamation-circle"></i> </button>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
+        {% for usuario in usuarios %}
+            {% set mensaje = usuario.id | getUltimoMensajeRecibido %}
+            <div class="card my-3">
+                <div class="card-body">
+                    <h4 class="card-title">{{ usuario.name }} {{ usuario.surname }} ({{ usuario.user }})</h4>
+                    <div class="card-text">
+                        <p>{{ mensaje.mensaje }}</p>
+                        <p class="text-muted">{{ mensaje.fecha }}</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ path('conversacion', {'idusername': usuario.id }) }}" class="btn btn-primary float-right" title="Ver conversación"><i class="fa fas fa-eye"></i></a>
+                    <button onclick="deleteRespuesta({{ usuario.id }})" class="btn btn-danger float-right mr-2" title="Eliminar conversación"><i class="fa fas fa-trash-alt"></i> </button>
+                    <button class="btn btn-danger float-right mr-2" title="Reportar usuario" onclick="reportUser({{ usuario.id }})"><i class="fas fa-exclamation-circle"></i> </button>
+                </div>
+            </div>
+        {% endfor %}
     {% endif %}
     </div>
 {% endblock %}

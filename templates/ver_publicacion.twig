@@ -3,20 +3,20 @@
 {% block body %}
     <div class="container">
         <a href="{{ path('foro') }}" class="btn btn-sm btn-secondary mt-5">Volver al foro</a>
-        <h2 class="mt-3">{{ publicacion.titulo }}</h2>
-        <div class="card mt-3 mb-3" style="background-color: #e2daff;">
-            <div class="card-header">{{ usuarios[publicacion.id_usuario].name }}</div>
-            <div class="card-body">{{ publicacion.descripcion }}</div>
+        <h2 class="mt-3 display-4">{{ publicacion.titulo }}</h2>
+        <div class="card mt-3 mb-3">
+            <div class="card-header"><b>{{ usuarios[publicacion.id_usuario].name }}</b></div>
+            <div class="card-body my-3">{{ publicacion.descripcion }}</div>
             <div class="card-footer">{{ publicacion.fecha }}
                 {% if app.user.id != publicacion.id_usuario %}
-                    <a href="{{ path('crear_mensaje', {'id': publicacion.id_usuario }) }}" class="btn btn-primary btn-sm mx-auto float-right "><i class="fas fa-envelope"></i></a>
-                    <button class="btn btn-sm btn-danger float-right " title="Reportar usuario" onclick="reportUser({{ publicacion.id_usuario }}, 'publicación')"><i class="fas fa-exclamation-circle"></i> </button>
+                    <a href="{{ path('crear_mensaje', {'id': publicacion.id_usuario }) }}" class="btn btn-primary float-right "><i class="fas fa-envelope"></i></a>
+                    <button class="btn btn-danger float-right mr-2" title="Reportar usuario" onclick="reportUser({{ publicacion.id_usuario }}, 'publicación')"><i class="fas fa-exclamation-circle"></i> </button>
                 {% endif %}
             </div>
         </div>
 
         <a href="{{ path('crear_respuesta', {"id" : publicacion.id}) }}" class="btn btn-primary mt-3">Añadir respuesta</a>
-        <a href="{{ path('ver_usuario', {"id" : publicacion.id_usuario}) }}" class="btn btn-dark mt-3">Ver usuario</a>
+        <a href="{{ path('ver_usuario', {"id" : publicacion.id_usuario}) }}" class="btn btn-dark mt-3 ml-2">Ver usuario</a>
 
         {% for respuesta in respuestas %}
             <div class="card ml-5 mb-3 mt-3 answer">
