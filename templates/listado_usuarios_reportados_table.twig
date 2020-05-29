@@ -18,6 +18,9 @@
                 <td>{{ usuario.motivo }}</td>
                 <td>
                     <button class="btn btn-danger btn-sm" onclick="deleteUser({{ usuario.id_reportado }})"><i class="fas fa-trash-alt"></i></button>
+                    {% if usuario_reportado.block != 1%}
+                        <button class="btn btn-danger btn-sm" onclick="blockUser({{ usuario.id_reportado }})"><i class="fas fa-ban"></i></button>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

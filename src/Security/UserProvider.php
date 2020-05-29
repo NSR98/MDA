@@ -42,7 +42,7 @@ class UserProvider implements UserProviderInterface
         }
         else
         {
-            return new User($row["id"], $row["user"], $row["password"], $row["surname"], $row["name"], $row["dni"], $row["email"], $row["rol"]);
+            return new User($row["id"], $row["user"], $row["password"], $row["surname"], $row["name"], $row["dni"], $row["email"], $row["rol"],$row["block"]);
         }
     }
 

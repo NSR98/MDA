@@ -89,6 +89,11 @@ class PoliticumDataAccess extends DataAccess {
         );
     }
 
+    public function updateBlockUser(int $id)
+    {
+        return parent::executeSQL("UPDATE usuarios SET block := 1 WHERE id= :id", array('id' => $id));
+    }
+
     public function modifyUser(User $user, $id)
     {
         return parent::executeSQL("UPDATE usuarios SET user= :user, surname= :surname, name = :name, 

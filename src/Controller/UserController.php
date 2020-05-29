@@ -278,6 +278,29 @@ class UserController extends AbstractController
     }
 
     /**
+     * @Route("/bloquear_usuario", name="bloquear_usuario")
+     * @param PoliticumDataAccess $dataAccess
+     * @return JsonResponse
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function bloquear_usuario(Request $request, PoliticumDataAccess $dataAccess): JsonResponse
+    {
+        if (!$request->request->has("id")) {
+            throw new AccessDeniedException();
+        }
+
+        if ($dataAccess->updateBlockUser($request->request->get("id"))) {
+            return new JsonResponse([
+                'content' => $this->renderView('listado_usuarios_reportados_table.twig', [
+                    "usuarios" => $dataAccess->getReportedUsers(),
+                ]),
+            ]);
+        } else {
+            return new JsonResponse(['content' => null]);
+        }
+    }
+
+    /**
      * @Route("/buscar_usuario", name="buscar_usuario")
      * @IsGranted("ROLE_USER")
      * @param PoliticumDataAccess $dataAccess

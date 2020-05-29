@@ -84,7 +84,11 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator
         }
         else
         {
-            $user = new User($row["id"], $row["user"], $row["password"], $row["surname"], $row["name"], $row["dni"], $row["email"], $row["rol"]);
+            $user = new User($row["id"], $row["user"], $row["password"], $row["surname"], $row["name"], $row["dni"], $row["email"], $row["rol"], $row["block"]);
+        }
+
+        if($row["block"] != 0){
+            throw new CustomUserMessageAuthenticationException('This User is blocked.');
         }
 
         if (!$user) {

@@ -9,7 +9,8 @@
             <div class="card-body">{{ publicacion.descripcion }}</div>
             <div class="card-footer">{{ publicacion.fecha }}
                 {% if app.user.id != publicacion.id_usuario %}
-                    <button class="btn btn-sm btn-danger float-right" title="Reportar usuario" onclick="reportUser({{ publicacion.id_usuario }}, 'publicación')"><i class="fas fa-exclamation-circle"></i> </button>
+                    <a href="{{ path('crear_mensaje', {'id': publicacion.id_usuario }) }}" class="btn btn-primary btn-sm mx-auto float-right "><i class="fas fa-envelope"></i></a>
+                    <button class="btn btn-sm btn-danger float-right " title="Reportar usuario" onclick="reportUser({{ publicacion.id_usuario }}, 'publicación')"><i class="fas fa-exclamation-circle"></i> </button>
                 {% endif %}
             </div>
         </div>

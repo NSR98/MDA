@@ -40,5 +40,33 @@
                 }
             });
         }
+
+
+        function blockUser(id) {
+            bootbox.confirm("¿Seguro que deseas bloquear al usuario?", function(result){
+                if (result) {
+                    $.ajax({
+                        method: 'POST',
+                        url: '{{ path('bloquear_usuario') }}',
+                        data: {
+                            "id" : id,
+                        },
+                        success: function(data) {
+                            if (data.content) {
+                                bootbox.alert("Usuario bloqueado con éxito.");
+                                $('[data-toggle="tooltip"]').tooltip("hide");
+                                $("#tableWrapper").empty().append(data.content);
+                                $('[data-toggle="tooltip"]').tooltip();
+                            } else {
+                                bootbox.alert("Hubo un error al bloquear el usuario. Por favor, inténtalo de nuevo más tarde.");
+                            }
+                        },
+                        error: function() {
+                            bootbox.alert("Hubo un error al bloquear el usuario. Por favor, inténtalo de nuevo más tarde.")
+                        }
+                    });
+                }
+            });
+        }
     </script>
 {% endblock %}
